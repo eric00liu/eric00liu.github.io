@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/asset/guolin.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>egads搭建 | Hexo</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/asset/guolin.png" alt="Hexo" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  July 13, 2018
+  
+
+  <h1 class="post-title">egads搭建</h1>
+  <section class="post-content article-entry">
+    <p>egads是雅虎开源的可扩展异常检测系统, 地址：<a href="https://github.com/yahoo/egads" target="_blank" rel="noopener">https://github.com/yahoo/egads</a></p>
+<h2 id="storm搭建"><a href="#storm搭建" class="headerlink" title="storm搭建"></a>storm搭建</h2><p>雅虎的论文上讲到他们是集成到storm中，storm用来做日志的流式计算确实也非常合适。</p>
+<h3 id="通过docker-compose启动storm系统"><a href="#通过docker-compose启动storm系统" class="headerlink" title="通过docker-compose启动storm系统"></a>通过docker-compose启动storm系统</h3><p><a href="https://blog.sectong.com/blog/storm_log_stat_openfire.html" target="_blank" rel="noopener">https://blog.sectong.com/blog/storm_log_stat_openfire.html</a></p>
+<h3 id="使用之前已经搭建好的kafka"><a href="#使用之前已经搭建好的kafka" class="headerlink" title="使用之前已经搭建好的kafka"></a>使用之前已经搭建好的kafka</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">创建一个topic</span><br><span class="line">bin/kafka-topics.sh --create --topic strom-test -partitions 1 --zookeeper 10.71.26.32:2181/kafka --replication-factor 1</span><br></pre></td></tr></table></figure>
+<h3 id="运行hello-world"><a href="#运行hello-world" class="headerlink" title="运行hello world"></a>运行hello world</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使用storm官方样例</span><br><span class="line">https://github.com/apache/storm/tree/master/examples/storm-kafka-client-examples</span><br></pre></td></tr></table></figure>
+<p>执行命令，进行编译<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mvn clean package</span><br></pre></td></tr></table></figure></p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2013/07/13/hello-world/">
+        <!--文章标题--> next →
+    </a>
+    
+</nav>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2018 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+    </body>
+</html>
+
+
