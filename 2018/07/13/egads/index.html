@@ -48,8 +48,11 @@
   <section class="post-content article-entry">
     <p>egads是雅虎开源的可扩展异常检测系统, 地址：<a href="https://github.com/yahoo/egads" target="_blank" rel="noopener">https://github.com/yahoo/egads</a></p>
 <h2 id="storm搭建"><a href="#storm搭建" class="headerlink" title="storm搭建"></a>storm搭建</h2><p>雅虎的论文上讲到他们是集成到storm中，storm用来做日志的流式计算确实也非常合适。</p>
-<h3 id="通过docker-compose启动storm系统"><a href="#通过docker-compose启动storm系统" class="headerlink" title="通过docker-compose启动storm系统"></a>通过docker-compose启动storm系统</h3><p><a href="https://blog.sectong.com/blog/storm_log_stat_openfire.html" target="_blank" rel="noopener">https://blog.sectong.com/blog/storm_log_stat_openfire.html</a></p>
-<h3 id="使用之前已经搭建好的kafka"><a href="#使用之前已经搭建好的kafka" class="headerlink" title="使用之前已经搭建好的kafka"></a>使用之前已经搭建好的kafka</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">创建一个topic</span><br><span class="line">bin/kafka-topics.sh --create --topic strom-test -partitions 1 --zookeeper 10.71.26.32:2181/kafka --replication-factor 1</span><br></pre></td></tr></table></figure>
+<h3 id=""><a href="#" class="headerlink" title=""></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~~~https://blog.sectong.com/blog/storm_log_stat_openfire.html</span><br></pre></td></tr></table></figure></h3><h3 id="通过k8s启动storm系统"><a href="#通过k8s启动storm系统" class="headerlink" title="通过k8s启动storm系统"></a>通过k8s启动storm系统</h3><p>参考这篇说明：<a href="https://github.com/kubernetes/examples/tree/master/staging/storm" target="_blank" rel="noopener">https://github.com/kubernetes/examples/tree/master/staging/storm</a></p>
+<h3 id="运行storm-topology"><a href="#运行storm-topology" class="headerlink" title="运行storm topology"></a>运行storm topology</h3><p>启动装有storm的docker<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -w /opt/apache-storm mattf/storm-base sh</span><br></pre></td></tr></table></figure></p>
+<p>配置配置ZK和nimbus<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/configure.sh  zkClusterIp nimbusClusterIp</span><br></pre></td></tr></table></figure></p>
+<p>提交storm topology<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bin/storm jar examples/storm-starter/storm-starter-topologies-0.9.3.jar storm.starter.RollingTopWords  production-topology remote</span><br><span class="line"></span><br><span class="line">Topology_name        Status     Num_tasks  Num_workers  Uptime_secs</span><br><span class="line">-------------------------------------------------------------------</span><br><span class="line">production-topology  ACTIVE     15         1            18</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用之前已经搭建好的kafka"><a href="#使用之前已经搭建好的kafka" class="headerlink" title="使用之前已经搭建好的kafka"></a>使用之前已经搭建好的kafka</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">创建一个topic</span><br><span class="line">bin/kafka-topics.sh --create --topic strom-test -partitions 1 --zookeeper 10.0.0.0:2181/kafka --replication-factor 1</span><br></pre></td></tr></table></figure>
 <h3 id="运行hello-world"><a href="#运行hello-world" class="headerlink" title="运行hello world"></a>运行hello world</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使用storm官方样例</span><br><span class="line">https://github.com/apache/storm/tree/master/examples/storm-kafka-client-examples</span><br></pre></td></tr></table></figure>
 <p>执行命令，进行编译<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mvn clean package</span><br></pre></td></tr></table></figure></p>
 
@@ -65,6 +68,10 @@
 </article>
 
 <nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2018/07/13/kafka常用方法/">
+        ← prev <!--kafka常用方法-->
+    </a>
     
     <span class="page-number">•</span>
     

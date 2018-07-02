@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>kafka常用方法 | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  July 13, 2018
+  
+
+  <h1 class="post-title">kafka常用方法</h1>
+  <section class="post-content article-entry">
+    <p>Kafka是由LinkedIn开发的一个分布式的消息系统，使用Scala编写，它以可水平扩展和高吞吐率而被广泛使用。</p>
+<h2 id="kafka搭建"><a href="#kafka搭建" class="headerlink" title="kafka搭建"></a>kafka搭建</h2><p>coming soon</p>
+<h3 id="通过docker-compose启动storm系统"><a href="#通过docker-compose启动storm系统" class="headerlink" title="通过docker-compose启动storm系统"></a>通过docker-compose启动storm系统</h3><p><a href="https://blog.sectong.com/blog/storm_log_stat_openfire.html" target="_blank" rel="noopener">https://blog.sectong.com/blog/storm_log_stat_openfire.html</a></p>
+<h3 id="创建一个topic"><a href="#创建一个topic" class="headerlink" title="创建一个topic"></a>创建一个topic</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --topic strom-test -partitions 1 --zookeeper 10.71.26.31:2181/kafka --replication-factor 1</span><br></pre></td></tr></table></figure>
+<h3 id="查看topics"><a href="#查看topics" class="headerlink" title="查看topics"></a>查看topics</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --describe --zookeeper 10.71.26.31:2181/kafka</span><br></pre></td></tr></table></figure>
+<h3 id="用python写入消息到kafka"><a href="#用python写入消息到kafka" class="headerlink" title="用python写入消息到kafka"></a>用python写入消息到kafka</h3><p>写入到strom-test这个topic里消息<br>一个Python的kafka SDK:  <a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">https://github.com/dpkp/kafka-python</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">from kafka import KafkaProducer</span><br><span class="line">producer = KafkaProducer(bootstrap_servers=&apos;10.71.26.31:9092&apos;)  # broker address</span><br><span class="line">producer.send(&apos;strom-test&apos;, b&apos;some_message_bytes&apos;)</span><br></pre></td></tr></table></figure></p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/07/13/egads/">
+        <!--egads搭建--> next →
+    </a>
+    
+</nav>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2018 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+    </body>
+</html>
+
+
