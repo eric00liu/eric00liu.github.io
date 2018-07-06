@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>percol是一个交互式的grep工具 | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  March 12, 2016
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/grep/'>grep</a> 
+    
+      <a href='/tags/linux命令/'>linux命令</a> 
+    
+      <a href='/tags/效率/'>效率</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">percol是一个交互式的grep工具</h1>
+  <section class="post-content article-entry">
+    <p>percol是一个交互式的grep工具, github主页在此：<a href="https://github.com/mooz/percol" target="_blank" rel="noopener">https://github.com/mooz/percol</a><br>grep是linux中使用率颇高的一个命令，主要是作用是从stdin或是文件中接收输入，在其中搜索你想找的关键词。<br>先来回忆一下grep是如何工作的, 例如</p>
+<h4 id="找出sys-log文件中所有包含字符串’aaa’的所有行："><a href="#找出sys-log文件中所有包含字符串’aaa’的所有行：" class="headerlink" title="找出sys.log文件中所有包含字符串’aaa’的所有行："></a>找出sys.log文件中所有包含字符串’aaa’的所有行：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &apos;aaa&apos;  sys.log</span><br></pre></td></tr></table></figure>
+<p>该命令执行后，会将所有包含’aaa’的行都打印到屏幕上。</p>
+<p>percol号称交互式grep工具，那么它的使用流程不太一样。<br>如果想在sys.log文件搜索’aaa’字符串，直接执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">percol sys.log</span><br></pre></td></tr></table></figure></p>
+<p>便进入percol编辑状态，此时再输入’aaa’, 会列出包含’aaa’的所有行，如果想搜索其他字符串，则只需清空编辑行，重新输入待搜索的字符串即可。</p>
+<h4 id="grep从管道中获取输入，例如利用ps和grep来查nginx进程："><a href="#grep从管道中获取输入，例如利用ps和grep来查nginx进程：" class="headerlink" title="grep从管道中获取输入，例如利用ps和grep来查nginx进程："></a>grep从管道中获取输入，例如利用ps和grep来查nginx进程：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep nginx</span><br></pre></td></tr></table></figure>
+<p>如果用percol来做这件事，那么命令是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | percol</span><br></pre></td></tr></table></figure></p>
+<p>照例进入percol编辑状态，此时再输入nginx，便列出所有nginx进程。<br>到这里，以上两个例子只是最简单的场景应用。</p>
+<h2 id="用percol来增强历史命令搜索"><a href="#用percol来增强历史命令搜索" class="headerlink" title="用percol来增强历史命令搜索"></a>用percol来增强历史命令搜索</h2><p>如果你经常用ctrl+r来搜索之前执行过的命令，那么一定要试试percol增强版<br>打开 ~/.zshrc，将下面的代码放入文件里<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function exists &#123; which $1 &amp;&gt; /dev/null &#125;if exists percol; then</span><br><span class="line">function percol_select_history() &#123;        local tac</span><br><span class="line">    exists gtac &amp;&amp; tac=&quot;gtac&quot; || &#123; exists tac &amp;&amp; tac=&quot;tac&quot; || &#123; tac=&quot;tail -r&quot; &#125; &#125;</span><br><span class="line">    BUFFER=$(fc -l -n 1 | eval $tac | percol --query &quot;$LBUFFER&quot;)</span><br><span class="line">        CURSOR=$#BUFFER         # move cursor</span><br><span class="line">        zle -R -c               # refresh</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">zle -N percol_select_history</span><br><span class="line">bindkey &apos;^R&apos; percol_select_history</span><br><span class="line"></span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p>
+<p>是之立即生效<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ source ~/.zshrc</span><br></pre></td></tr></table></figure></p>
+<p>这时再试试 ctrl+r，是不是很爽，反正是把我爽到了。<br>个人感受：进入percol的编辑状态后，使用体验跟windows系统里的everything很像。</p>
+<h2 id="安装percol"><a href="#安装percol" class="headerlink" title="安装percol"></a>安装percol</h2><h3 id="PyPI自动安装"><a href="#PyPI自动安装" class="headerlink" title="PyPI自动安装"></a>PyPI自动安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo pip install percol</span><br></pre></td></tr></table></figure>
+<h3 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h3><p>先将代码下载到任意地方<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git clone git://github.com/mooz/percol.git</span><br><span class="line">$ cd percol</span><br></pre></td></tr></table></figure></p>
+<p>然后执行命令安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo python setup.py install</span><br></pre></td></tr></table></figure>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2018/06/28/eth/">
+        ← prev <!--区块链开发-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2013/07/13/hello-world/">
+        <!--文章标题--> next →
+    </a>
+    
+</nav>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2018 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+    </body>
+</html>
+
+
