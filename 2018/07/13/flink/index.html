@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>flink搭建 | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  July 13, 2018
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/异常检测/'>异常检测</a> 
+    
+      <a href='/tags/flink/'>flink</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">flink搭建</h1>
+  <section class="post-content article-entry">
+    <p>搭建起来比较简单，只需要三个配置文件，使用kubectl create -f 就可以了<br>通过jobmanager-service的cluster-ip:8081，即可访问flink UI的页面</p>
+<p>jobmanager-service.yaml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: flink-jobmanager</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - name: rpc</span><br><span class="line">    port: 6123</span><br><span class="line">  - name: blob</span><br><span class="line">    port: 6124</span><br><span class="line">  - name: query</span><br><span class="line">    port: 6125</span><br><span class="line">  - name: ui</span><br><span class="line">    port: 8081</span><br><span class="line">  selector:</span><br><span class="line">    app: flink</span><br><span class="line">    component: jobmanager</span><br></pre></td></tr></table></figure>
+<p>jobmanager-deployment.yaml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: flink-jobmanager</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: flink</span><br><span class="line">        component: jobmanager</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: jobmanager</span><br><span class="line">        image: flink:latest</span><br><span class="line">        args:</span><br><span class="line">        - jobmanager</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 6123</span><br><span class="line">          name: rpc</span><br><span class="line">        - containerPort: 6124</span><br><span class="line">          name: blob</span><br><span class="line">        - containerPort: 6125</span><br><span class="line">          name: query</span><br><span class="line">        - containerPort: 8081</span><br><span class="line">          name: ui</span><br><span class="line">        env:</span><br><span class="line">        - name: JOB_MANAGER_RPC_ADDRESS  </span><br><span class="line">          value: # 通过kubectl get services 查看jobmanager-service的cluster-ip </span><br><span class="line">```          </span><br><span class="line">          </span><br><span class="line">taskmanager-deployment.yaml</span><br></pre></td></tr></table></figure></p>
+<p>apiVersion: extensions/v1beta1<br>kind: Deployment<br>metadata:<br>  name: flink-taskmanager<br>spec:<br>  replicas: 2<br>  template:<br>    metadata:<br>      labels:<br>        app: flink<br>        component: taskmanager<br>    spec:<br>      containers:</p>
+<pre><code>- name: taskmanager
+  image: flink:latest
+  args:
+  - taskmanager
+  ports:
+  - containerPort: 6121
+    name: data
+  - containerPort: 6122
+    name: rpc
+  - containerPort: 6125
+    name: query
+  env:
+  - name: JOB_MANAGER_RPC_ADDRESS    
+    value: # 通过kubectl get services 查看jobmanager-service的cluster-ip  
+</code></pre><p><code>`</code></p>
+<h2 id="flink-开发教程"><a href="#flink-开发教程" class="headerlink" title="flink 开发教程"></a>flink 开发教程</h2><p>一，概述  <a href="http://doc.flink-china.org/1.2.0/concepts/programming-model.html" target="_blank" rel="noopener">http://doc.flink-china.org/1.2.0/concepts/programming-model.html</a><br>二、滑动窗口 <a href="https://flink.apache.org/news/2015/12/04/Introducing-windows.html" target="_blank" rel="noopener">https://flink.apache.org/news/2015/12/04/Introducing-windows.html</a></p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2018/07/13/kafka常用方法/">
+        ← prev <!--kafka常用方法-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/07/06/influxdb/">
+        <!--influxdb使用--> next →
+    </a>
+    
+</nav>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2018 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+    </body>
+</html>
+
+

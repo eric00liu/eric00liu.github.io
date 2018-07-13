@@ -8,7 +8,7 @@
         <link rel="shortcut icon" href="/ericliu.png"/>
         <link rel="canonical" href="http://guolinn.com/">
         <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
-        <title>Tag: docker | EricLiu</title>
+        <title>influxdb使用 | EricLiu</title>
         <meta name="description" content="{{meta_description}}">
 
         <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
@@ -24,7 +24,7 @@
 
     </head>
     
-		<body class="home-template">
+		<body class="post-template">
 	
 
         <header id="header">
@@ -39,17 +39,9 @@
 
         <main id="content">
         
-	<h1 class="post-title">docker</h1> 
 
-
-<section id="{{id}}" class="{{post_class}}">
-  <h3 class="post-title">
-  <a href="/2018/07/06/influxdb/">influxdb使用</a>
-  
-  <span class="separator"> &middot; </span>
-  
+<article class="post">
   July 6, 2018
-  
   
     <span class="taglist">  &middot; 
     
@@ -64,43 +56,39 @@
     
       <a href='/tags/docker/'>docker</a> 
     
-    </saan>
+    </span>
   
-  </h3>
-</section>
 
-<section id="{{id}}" class="{{post_class}}">
-  <h3 class="post-title">
-  <a href="/2018/07/06/storm/">storm系统搭建</a>
-  
-  <span class="separator"> &middot; </span>
-  
-  July 6, 2018
-  
-  
-    <span class="taglist">  &middot; 
-    
-    
-      <a href='/tags/异常检测/'>异常检测</a> 
-    
-      <a href='/tags/storm/'>storm</a> 
-    
-      <a href='/tags/nimubs/'>nimubs</a> 
-    
-      <a href='/tags/k8s/'>k8s</a> 
-    
-      <a href='/tags/docker/'>docker</a> 
-    
-    </saan>
-  
-  </h3>
-</section>
+  <h1 class="post-title">influxdb使用</h1>
+  <section class="post-content article-entry">
+    <h3 id="通过bin文件直接运行"><a href="#通过bin文件直接运行" class="headerlink" title="通过bin文件直接运行"></a>通过bin文件直接运行</h3><p>下载：<a href="https://dl.influxdata.com/influxdb/releases/influxdb-1.5.4-static_linux_amd64.tar.gz" target="_blank" rel="noopener">https://dl.influxdata.com/influxdb/releases/influxdb-1.5.4-static_linux_amd64.tar.gz</a><br>解压之后，./influxd -config influxdb.conf 即可运行</p>
+<h3 id="通过docker运行"><a href="#通过docker运行" class="headerlink" title="通过docker运行"></a>通过docker运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8086:8086 -v /data0/influxdb_dockerdata:/var/lib/influxdb \</span><br><span class="line">  --restart=always --name influxdb \</span><br><span class="line">  -e INFLUXDB_DATA_INDEX_VERSION=tsi1 \</span><br><span class="line">  -e GOGC=10 \</span><br><span class="line">  -e INFLUXDB_DATA_MAX-SERIES-PER-DATABASE=0 \</span><br><span class="line">  -e INFLUXDB_DATA_MAX-VALUES-PER-TAG=0 \</span><br><span class="line">  influxdb:latest</span><br></pre></td></tr></table></figure>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
 
 <nav class="pagination" role="pagination">
-  
-  <span class="page-number">Page 1 of 1</span>
-  
+    
+    <a class="newer-posts" href="/2018/07/13/flink/">
+        ← prev <!--flink搭建-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/07/06/storm/">
+        <!--storm系统搭建--> next →
+    </a>
+    
 </nav>
+
 
         </main>
         <footer id="footer">
