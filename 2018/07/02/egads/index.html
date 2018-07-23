@@ -60,10 +60,64 @@
   <h1 class="post-title">egads搭建</h1>
   <section class="post-content article-entry">
     <p>egads是雅虎开源的可扩展异常检测系统, 地址：<a href="https://github.com/yahoo/egads" target="_blank" rel="noopener">https://github.com/yahoo/egads</a></p>
-<h2 id="storm搭建"><a href="#storm搭建" class="headerlink" title="storm搭建"></a>storm搭建</h2><p>雅虎的论文上讲到他们是集成到storm中，storm用来做日志的流式计算确实也非常合适。</p>
-<figure class="highlight plain"><figcaption><span>通过docker-compose启动storm系统~~~</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~~~https://blog.sectong.com/blog/storm_log_stat_openfire.html</span><br></pre></td></tr></table></figure>
-<h3 id="通过k8s启动storm系统"><a href="#通过k8s启动storm系统" class="headerlink" title="通过k8s启动storm系统"></a>通过k8s启动storm系统</h3><p>参考这篇说明：<a href="https://github.com/kubernetes/examples/tree/master/staging/storm" target="_blank" rel="noopener">https://github.com/kubernetes/examples/tree/master/staging/storm</a></p>
-<h3 id="使用之前已经搭建好的kafka"><a href="#使用之前已经搭建好的kafka" class="headerlink" title="使用之前已经搭建好的kafka"></a>使用之前已经搭建好的kafka</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">创建一个topic</span><br><span class="line">bin/kafka-topics.sh --create --topic test -partitions 1 --zookeeper 10.0.0.0:2181/kafka --replication-factor 1</span><br></pre></td></tr></table></figure>
+<h3 id="tsmm模型"><a href="#tsmm模型" class="headerlink" title="tsmm模型"></a>tsmm模型</h3><ul>
+<li>DoubleExponentialSmoothingModel     </li>
+</ul>
+<blockquote>
+<p>双指数平滑 - 也称为Holt指数平滑 - 改进了常见的简单指数平滑模型，考虑了数据中含有有趋势因素的情况。      </p>
+</blockquote>
+<ul>
+<li><p>MovingAverageModel</p>
+<blockquote>
+<p>移动平均预测模型基于人工构建的时间序列，其中给定时间段的值由该值的平均值和某些前后时间段的值代替。</p>
+</blockquote>
+</li>
+<li><p>MultipleLinearRegressionModel</p>
+<blockquote>
+<p>多变量线性回归模型</p>
+</blockquote>
+</li>
+<li><p>NaiveForecastingModel</p>
+<blockquote>
+<p>朴素预测模型是移动平均预测模型的一个特例，即当 平滑周期数为1时的特例。</p>
+</blockquote>
+</li>
+<li><p>OlympicModel</p>
+<blockquote>
+<p>去掉一个最高分，去掉一个最低分，然后计算最近k周的数据的平均数，作为当前的预测值。</p>
+</blockquote>
+</li>
+<li><p>PolynomialRegressionModel</p>
+<blockquote>
+<p>单变量多项式回归模型</p>
+</blockquote>
+</li>
+<li><p>RegressionModel</p>
+<blockquote>
+<p>单变量线性回归模型</p>
+</blockquote>
+</li>
+<li><p>SimpleExponentialSmoothingModel</p>
+<blockquote>
+<p>简单指数平滑回归模型</p>
+</blockquote>
+</li>
+<li><p>SpectralSmoother</p>
+<blockquote>
+<p>基于输入时间序列’Hankel矩阵的奇异值分解（SVD）实现平滑技术</p>
+</blockquote>
+</li>
+<li><p>TripleExponentialSmoothingModel</p>
+<blockquote>
+<p>三指数平滑，也称为Winters方法, 是双指数平滑模型的改进，考虑了数据中含有季节性和周期性</p>
+</blockquote>
+</li>
+<li><p>WeightedMovingAverageModel</p>
+<blockquote>
+<p>加权移动平均模型，由当前周期和上个周期的数据做的加权平均值做为当前的预测值</p>
+</blockquote>
+</li>
+</ul>
 
   </section>
   <footer class="post-footer">
@@ -89,6 +143,26 @@
     </a>
     
 </nav>
+<div id="comments">
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zODI4NS8xNDgxMw==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+</div>
 
 
         </main>
