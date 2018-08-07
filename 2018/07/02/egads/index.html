@@ -46,9 +46,9 @@
     <span class="taglist">  &middot; 
     
     
-      <a href='/tags/egads/'>egads</a> 
-    
       <a href='/tags/异常检测/'>异常检测</a> 
+    
+      <a href='/tags/egads/'>egads</a> 
     
       <a href='/tags/异常处理/'>异常处理</a> 
     
@@ -118,6 +118,47 @@
 </li>
 </ul>
 <h3 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h3><p><img src="/08.png" alt=""></p>
+<h3 id="时序的几种特征"><a href="#时序的几种特征" class="headerlink" title="时序的几种特征"></a>时序的几种特征</h3><ul>
+<li><p>Periodicity (frequency)       </p>
+<blockquote>
+<p>Periodicity is very important for determining the seasonality.         </p>
+</blockquote>
+</li>
+<li><p>Trend</p>
+<blockquote>
+<p>Exists if there is a long-term change in the mean level Seasonality Exists when a time series is influenced by seasonal factors, such as month of the year or day of the week</p>
+</blockquote>
+</li>
+<li>Auto-correlation <blockquote>
+<p>Represents long-range dependence. </p>
+</blockquote>
+</li>
+<li>Non-linearity <blockquote>
+<p>A non-linear time-series contains complex dynamics that are usually not represented by linear models. </p>
+</blockquote>
+</li>
+<li>Skewness <blockquote>
+<p>Measures symmetry, or more precisely, the lack of symmetry. </p>
+</blockquote>
+</li>
+<li>Kurtosis <blockquote>
+<p>Measures if the data are peaked or flat, relative to a normal distribution.</p>
+</blockquote>
+</li>
+<li>Hurst <blockquote>
+<p>A measure of long-term memory of time series. </p>
+</blockquote>
+</li>
+<li>Lyapunov Exponent <blockquote>
+<p>A measure of the rate of divergence of nearby trajectories.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="如何选择模型"><a href="#如何选择模型" class="headerlink" title="如何选择模型"></a>如何选择模型</h3><blockquote>
+<p>基于时序数据的特征来选择模型，比将时序数据在各个模型上交叉测试要快的多。  by:6.2.1   </p>
+</blockquote>
+<h4 id="当时序是强趋势性特征时，各个模型的表现"><a href="#当时序是强趋势性特征时，各个模型的表现" class="headerlink" title="当时序是强趋势性特征时，各个模型的表现"></a>当时序是强趋势性特征时，各个模型的表现</h4><p><img src="/egads_01.png" alt=""></p>
+<h4 id="当时序是强趋势性-强季节性特征时，各个模型的表现"><a href="#当时序是强趋势性-强季节性特征时，各个模型的表现" class="headerlink" title="当时序是强趋势性+强季节性特征时，各个模型的表现"></a>当时序是强趋势性+强季节性特征时，各个模型的表现</h4><p><img src="/egads_02.png" alt=""></p>
 
   </section>
   <footer class="post-footer">
