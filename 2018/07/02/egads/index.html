@@ -46,11 +46,11 @@
     <span class="taglist">  &middot; 
     
     
-      <a href='/tags/异常检测/'>异常检测</a> 
-    
       <a href='/tags/egads/'>egads</a> 
     
-      <a href='/tags/异常处理/'>异常处理</a> 
+      <a href='/tags/异常检测/'>异常检测</a> 
+    
+      <a href='/tags/时序预测/'>时序预测</a> 
     
       <a href='/tags/yahoo/'>yahoo</a> 
     
@@ -117,6 +117,18 @@
 </blockquote>
 </li>
 </ul>
+<h3 id="adm模型"><a href="#adm模型" class="headerlink" title="adm模型"></a>adm模型</h3><ul>
+<li><p>AdaptiveKernelDensityChangePointDetector     </p>
+<blockquote>
+<p>基于核密度的变点检测</p>
+</blockquote>
+</li>
+<li><p>DBScanModel</p>
+<blockquote>
+<p>单变量线性回归模型</p>
+</blockquote>
+</li>
+</ul>
 <h3 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h3><p><img src="/08.png" alt=""></p>
 <h3 id="时序的几种特征"><a href="#时序的几种特征" class="headerlink" title="时序的几种特征"></a>时序的几种特征</h3><ul>
 <li><p>Periodicity (frequency)       </p>
@@ -159,6 +171,17 @@
 </blockquote>
 <h4 id="当时序是强趋势性特征时，各个模型的表现"><a href="#当时序是强趋势性特征时，各个模型的表现" class="headerlink" title="当时序是强趋势性特征时，各个模型的表现"></a>当时序是强趋势性特征时，各个模型的表现</h4><p><img src="/egads_01.png" alt=""></p>
 <h4 id="当时序是强趋势性-强季节性特征时，各个模型的表现"><a href="#当时序是强趋势性-强季节性特征时，各个模型的表现" class="headerlink" title="当时序是强趋势性+强季节性特征时，各个模型的表现"></a>当时序是强趋势性+强季节性特征时，各个模型的表现</h4><p><img src="/egads_02.png" alt=""></p>
+<h3 id="召回率和准确率的定义"><a href="#召回率和准确率的定义" class="headerlink" title="召回率和准确率的定义"></a>召回率和准确率的定义</h3><blockquote>
+<p>一个数据库有500个文档，其中有50个文档符合定义。系统检索到75个文档，但是实际只有45个符合定义。则：<br>召回率R=45/50=90%<br>准确率P=45/75=60%</p>
+</blockquote>
+<p>一个评价异常检测adm算法的指标<br>  $$F-Score = \frac{precision * recall}{precision + recall}$$</p>
+<p> F-Score越大，则检测的效果越好。<br> <img src="/egads_03.png" alt=""><br> 该图展示了EGADS中CP(不知道是啥，论文里没写), extremeLowDensity和KSigmaModel这三种adm模型，但并没有谁比谁好。</p>
+<h2 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h2><ol>
+<li><p>将各种模型跑出来的所有的异常点，(所有模型太多了，挑4个左右吧)。<br> WeightedMovingAverageModel是在8个tsmm模型里比较出来，对我们业务数据来说12小时长的时序数据，拟合最好的模型。</p>
+</li>
+<li><p>DBScanModel, ExtremeLowDensityModel, kSigma</p>
+</li>
+</ol>
 
   </section>
   <footer class="post-footer">
