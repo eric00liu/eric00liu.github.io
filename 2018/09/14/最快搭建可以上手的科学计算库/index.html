@@ -8,7 +8,7 @@
         <link rel="shortcut icon" href="/ericliu.png"/>
         <link rel="canonical" href="http://guolinn.com/">
         <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
-        <title>influxdb使用 | EricLiu</title>
+        <title>最快搭建可以上手的科学计算库（python） | EricLiu</title>
         <meta name="description" content="{{meta_description}}">
 
         <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
@@ -42,28 +42,30 @@
         
 
 <article class="post">
-  July 6, 2018
+  September 14, 2018
   
     <span class="taglist">  &middot; 
     
     
-      <a href='/tags/异常检测/'>异常检测</a> 
+      <a href='/tags/python/'>python</a> 
     
-      <a href='/tags/storm/'>storm</a> 
+      <a href='/tags/科学计算/'>科学计算</a> 
     
-      <a href='/tags/nimubs/'>nimubs</a> 
-    
-      <a href='/tags/k8s/'>k8s</a> 
-    
-      <a href='/tags/docker/'>docker</a> 
+      <a href='/tags/numpy/'>numpy</a> 
     
     </span>
   
 
-  <h1 class="post-title">influxdb使用</h1>
+  <h1 class="post-title">最快搭建可以上手的科学计算库（python）</h1>
   <section class="post-content article-entry">
-    <h3 id="通过bin文件直接运行"><a href="#通过bin文件直接运行" class="headerlink" title="通过bin文件直接运行"></a>通过bin文件直接运行</h3><p>下载：<a href="https://dl.influxdata.com/influxdb/releases/influxdb-1.5.4-static_linux_amd64.tar.gz" target="_blank" rel="noopener">https://dl.influxdata.com/influxdb/releases/influxdb-1.5.4-static_linux_amd64.tar.gz</a><br>解压之后，./influxd -config influxdb.conf 即可运行</p>
-<h3 id="通过docker运行"><a href="#通过docker运行" class="headerlink" title="通过docker运行"></a>通过docker运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8086:8086 -v /data0/influxdb_dockerdata:/var/lib/influxdb \</span><br><span class="line">  --restart=always --name influxdb \</span><br><span class="line">  -e INFLUXDB_DATA_INDEX_VERSION=tsi1 \</span><br><span class="line">  -e GOGC=10 \</span><br><span class="line">  -e INFLUXDB_DATA_MAX-SERIES-PER-DATABASE=0 \</span><br><span class="line">  -e INFLUXDB_DATA_MAX-VALUES-PER-TAG=0 \</span><br><span class="line">  influxdb:latest</span><br></pre></td></tr></table></figure>
+    <p>为什么说是最快呢，因为我们是使用docker来搭建，所以不需要考虑各种烦人的依赖问题。</p>
+<h4 id="拉取anaconda的docker镜像"><a href="#拉取anaconda的docker镜像" class="headerlink" title="拉取anaconda的docker镜像"></a>拉取anaconda的docker镜像</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull continuumio/anaconda</span><br></pre></td></tr></table></figure>
+<h4 id="在本机创建一个存放代码的目录"><a href="#在本机创建一个存放代码的目录" class="headerlink" title="在本机创建一个存放代码的目录"></a>在本机创建一个存放代码的目录</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/code</span><br></pre></td></tr></table></figure>
+<h4 id="启动anaconda，且把代码目录挂载进docker里"><a href="#启动anaconda，且把代码目录挂载进docker里" class="headerlink" title="启动anaconda，且把代码目录挂载进docker里"></a>启动anaconda，且把代码目录挂载进docker里</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d  -p 12345:8888 -v ~/code:/opt/notebooks continuumio/anaconda /bin/bash -c &quot;/opt/conda/bin/conda install jupyter -y --quiet &amp;&amp;  /opt/conda/bin/jupyter notebook --notebook-dir=/opt/notebooks --ip=&apos;*&apos; --port=8888 --no-browser --allow-root&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="等待1分钟之后，查看anaconda里jupyter的登录密码"><a href="#等待1分钟之后，查看anaconda里jupyter的登录密码" class="headerlink" title="等待1分钟之后，查看anaconda里jupyter的登录密码"></a>等待1分钟之后，查看anaconda里jupyter的登录密码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs distracted_bartik   （或者用docker ps查找出container id，来查看日志）</span><br></pre></td></tr></table></figure>
+<p>记住这个token，在下一步登录系统时需要，如果忘记了，当然还可以用上面这个docker logs命令重新查看</p>
+<p><img src="/anaconda-01.png" alt=""></p>
+<h4 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h4><p> 登录<a href="http://localhost:12345" target="_blank" rel="noopener">http://localhost:12345</a>, 开始使用吧</p>
 
   </section>
   <footer class="post-footer">
@@ -78,14 +80,14 @@
 
 <nav class="pagination" role="pagination">
     
-    <a class="newer-posts" href="/2018/07/13/flink/">
-        ← prev <!--flink搭建-->
+    <a class="newer-posts" href="/2018/09/17/methodAndtheory/">
+        ← prev <!--方法与理论-->
     </a>
     
     <span class="page-number">•</span>
     
-    <a class="older-posts" href="/2018/07/06/vuejs/">
-        <!--vuejs教程--> next →
+    <a class="older-posts" href="/2018/08/17/bootstrap/">
+        <!--bootstrap教程--> next →
     </a>
     
 </nav>

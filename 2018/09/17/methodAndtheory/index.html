@@ -8,7 +8,7 @@
         <link rel="shortcut icon" href="/ericliu.png"/>
         <link rel="canonical" href="http://guolinn.com/">
         <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
-        <title>influxdb使用 | EricLiu</title>
+        <title>方法与理论 | EricLiu</title>
         <meta name="description" content="{{meta_description}}">
 
         <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
@@ -42,28 +42,28 @@
         
 
 <article class="post">
-  July 6, 2018
+  September 17, 2018
   
     <span class="taglist">  &middot; 
     
     
-      <a href='/tags/异常检测/'>异常检测</a> 
-    
-      <a href='/tags/storm/'>storm</a> 
-    
-      <a href='/tags/nimubs/'>nimubs</a> 
-    
-      <a href='/tags/k8s/'>k8s</a> 
-    
-      <a href='/tags/docker/'>docker</a> 
+      <a href='/tags/投资/'>投资</a> 
     
     </span>
   
 
-  <h1 class="post-title">influxdb使用</h1>
+  <h1 class="post-title">方法与理论</h1>
   <section class="post-content article-entry">
-    <h3 id="通过bin文件直接运行"><a href="#通过bin文件直接运行" class="headerlink" title="通过bin文件直接运行"></a>通过bin文件直接运行</h3><p>下载：<a href="https://dl.influxdata.com/influxdb/releases/influxdb-1.5.4-static_linux_amd64.tar.gz" target="_blank" rel="noopener">https://dl.influxdata.com/influxdb/releases/influxdb-1.5.4-static_linux_amd64.tar.gz</a><br>解压之后，./influxd -config influxdb.conf 即可运行</p>
-<h3 id="通过docker运行"><a href="#通过docker运行" class="headerlink" title="通过docker运行"></a>通过docker运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8086:8086 -v /data0/influxdb_dockerdata:/var/lib/influxdb \</span><br><span class="line">  --restart=always --name influxdb \</span><br><span class="line">  -e INFLUXDB_DATA_INDEX_VERSION=tsi1 \</span><br><span class="line">  -e GOGC=10 \</span><br><span class="line">  -e INFLUXDB_DATA_MAX-SERIES-PER-DATABASE=0 \</span><br><span class="line">  -e INFLUXDB_DATA_MAX-VALUES-PER-TAG=0 \</span><br><span class="line">  influxdb:latest</span><br></pre></td></tr></table></figure>
+    <h2 id="凯利公式"><a href="#凯利公式" class="headerlink" title="凯利公式"></a>凯利公式</h2><p> $f = \frac{p<em>b - q</em>1}{b}$</p>
+<p>其中<br>    •    f为现有资金应进行下次投注的比例；<br>    •    b为投注可得的赔率（不含本金）；<br>    •    p为获胜率；<br>    •    q为落败率，即1 - p；<br>举例而言，若一赌博有60%的获胜率（p = 0.6，q = 0.4），而赌客在赢得赌局时，可获得一赔一的赔率（b = 1），则赌客应在每次机会中下注现有资金的20%（f* = 0.2），以最大化资金的长期增长率。 如果赔率没有优势，即 b = q / p，那么公式建议不下注。 如果赔率是负的，即b &lt; q / p，公式的结果是负的，也就是暗示应该下注到另外一边。</p>
+<h2 id="德尔塔对冲"><a href="#德尔塔对冲" class="headerlink" title="德尔塔对冲"></a>德尔塔对冲</h2><h3 id="vega"><a href="#vega" class="headerlink" title="vega"></a>vega</h3><p>Vega（ν）：衡量标的资产价格波动率变动时，期权价格的变化幅度，是用来衡量期货价格的波动率的变化对期权价值的影响。<br>Vega，指期权费（P）变化与标的汇率波动性（Volatility）变化的敏感性。<br>公式为：Vega=期权价格变化/波动率的变化。</p>
+<p>如果某期权的Vega为0.15，若价格波动率上升（下降）1%，期权的价值将上升（下降）0.15。</p>
+<pre><code>若期货价格波动率为20%，期权理论价值为3.25，
+ 当波动率上升为22%，期权理论价值为3.55（3.25+2×0.15）；
+ 当波动率下为18%，期权理论价值为2.95（3.25-2×0.15）。
+</code></pre><p>当价格波动率增加或减少时，期权的价值都会增加或减少因此，看涨期权与看跌期权的Vega都是正数。期权多头部位的Vega都是正数, 期权空头的Vega都是负数。</p>
+<p>如果投资者的部位Vega值为正数，将会从价格波动率的上涨中获利，反之，则希望价格波动率下降。对于Delta中性的部位，就可以不受期货价格的影响，而从价格波动率的变化中寻找盈利机会。</p>
+<p>对于外汇期权的买方而言，Vega值始终大于零，说明标的汇率波动性的增加将提高外汇期权的价值；相反，对于外汇期权的卖方而言，其Vega值始终为负。同样，当外汇期权处于平价状态时，Vega值最大；当期权处于较深的价内或者价外时，Vega值接近于零。</p>
 
   </section>
   <footer class="post-footer">
@@ -78,14 +78,10 @@
 
 <nav class="pagination" role="pagination">
     
-    <a class="newer-posts" href="/2018/07/13/flink/">
-        ← prev <!--flink搭建-->
-    </a>
-    
     <span class="page-number">•</span>
     
-    <a class="older-posts" href="/2018/07/06/vuejs/">
-        <!--vuejs教程--> next →
+    <a class="older-posts" href="/2018/09/14/最快搭建可以上手的科学计算库/">
+        <!--最快搭建可以上手的科学计算库（python）--> next →
     </a>
     
 </nav>
