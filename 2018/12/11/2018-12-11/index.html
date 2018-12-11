@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>window10内置linux | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a type="text/html" href="/about.html">About</a></h6>
+
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  December 11, 2018
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/windows/'>windows</a> 
+    
+      <a href='/tags/linux/'>linux</a> 
+    
+      <a href='/tags/cygwin/'>cygwin</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">window10内置linux</h1>
+  <section class="post-content article-entry">
+    <h2 id="首先参考这篇文章，在windows10上安装linux包"><a href="#首先参考这篇文章，在windows10上安装linux包" class="headerlink" title="首先参考这篇文章，在windows10上安装linux包"></a>首先参考这篇文章，在windows10上安装linux包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.jianshu.com/p/bc38ed12da1d</span><br></pre></td></tr></table></figure>
+<p>如果linux出现什么无法修复的问题时，需要卸载重装，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">卸载命令: lxrun /uninstall /full</span><br><span class="line">安装命令: lxrun /install /y</span><br></pre></td></tr></table></figure></p>
+<p>安装成功之后，</p>
+<h2 id="打开cmd，运行bash命令"><a href="#打开cmd，运行bash命令" class="headerlink" title="打开cmd，运行bash命令"></a>打开cmd，运行bash命令</h2><p>命令行运行 bash 进入Ubuntu, 默认使用的 root 帐号登录，可以通过指令 passwd 设置密码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># passwd root</span><br></pre></td></tr></table></figure></p>
+<h3 id="可选-安装ssh"><a href="#可选-安装ssh" class="headerlink" title="(可选) 安装ssh"></a>(可选) 安装ssh</h3><p> 因为cmd无法复制和粘贴，使用不太方便，所以在ubuntu中安装ssh<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> apt-get install openssh-server</span><br><span class="line"> dpkg-reconfigure openssh-server</span><br><span class="line"> </span><br><span class="line"> 修改/etc/ssh/sshd_config</span><br><span class="line"> # Port 23（22端口已被占用）        #</span><br><span class="line"># (取消注释)ListenAddress 0.0.0.0 #</span><br><span class="line"># UsePrivilegeSeparation no      #</span><br><span class="line"># PermitRootLogin yes            #</span><br><span class="line"># （注释）StrictModes yes         #</span><br><span class="line"># PasswordAuthentication yes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> service ssh start</span><br></pre></td></tr></table></figure></p>
+<h3 id="可选-安装putty"><a href="#可选-安装putty" class="headerlink" title="(可选) 安装putty"></a>(可选) 安装putty</h3><p>下载： <a href="https://the.earth.li/~sgtatham/putty/latest/w64/putty.exe" target="_blank" rel="noopener">https://the.earth.li/~sgtatham/putty/latest/w64/putty.exe</a>             </p>
+<p>配置 ssh连接到本机的127.0.0.1:23</p>
+<h3 id="可选-运行mtputty，让putty支持多标签"><a href="#可选-运行mtputty，让putty支持多标签" class="headerlink" title="(可选) 运行mtputty，让putty支持多标签"></a>(可选) 运行mtputty，让putty支持多标签</h3><p>下载 <a href="http://www.ttyplus.com/downloads.html" target="_blank" rel="noopener">http://www.ttyplus.com/downloads.html</a>, 免安装，直接运行<br>放到跟putty一个目录，免安装，点击mtputty运行即可<br>配置 ssh连接到本机的127.0.0.1:23    </p>
+<h3 id="可选-安装zsh"><a href="#可选-安装zsh" class="headerlink" title="(可选) 安装zsh"></a>(可选) 安装zsh</h3><p>zsh有很多特性，比bash使用起来方便很多<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get -y install zsh</span><br></pre></td></tr></table></figure></p>
+<p>配置zsh,使用一个默认配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh</span><br><span class="line">cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc</span><br></pre></td></tr></table></figure></p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/11/20/百度AOC-API/">
+        <!--百度AOC-API使用--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zODI4NS8xNDgxMw==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2018 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> </section>
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274257392'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274257392%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-122301641-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+
