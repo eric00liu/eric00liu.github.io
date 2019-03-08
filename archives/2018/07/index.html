@@ -107,7 +107,7 @@
 
 <section id="{{id}}" class="{{post_class}}">
   <h3 class="post-title">
-  <a href="/2018/07/06/storm/">storm系统搭建</a>
+  <a href="/2018/07/06/htmliframetest/">htmltest</a>
   
   <span class="separator"> &middot; </span>
   
@@ -134,7 +134,7 @@
 
 <section id="{{id}}" class="{{post_class}}">
   <h3 class="post-title">
-  <a href="/2018/07/06/htmliframetest/">htmltest</a>
+  <a href="/2018/07/06/storm/">storm系统搭建</a>
   
   <span class="separator"> &middot; </span>
   
@@ -278,6 +278,17 @@
             ga('create', 'UA-122301641-1', 'auto');
             ga('send', 'pageview');
         </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
     </body>
 </html>
 

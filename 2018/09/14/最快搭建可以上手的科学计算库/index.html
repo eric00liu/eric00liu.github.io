@@ -87,8 +87,8 @@
     
     <span class="page-number">•</span>
     
-    <a class="older-posts" href="/2018/08/17/v-charts/">
-        <!--v-charts教程--> next →
+    <a class="older-posts" href="/2018/08/17/bootstrap/">
+        <!--bootstrap教程--> next →
     </a>
     
 </nav>
@@ -127,6 +127,17 @@
             ga('create', 'UA-122301641-1', 'auto');
             ga('send', 'pageview');
         </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
     </body>
 </html>
 

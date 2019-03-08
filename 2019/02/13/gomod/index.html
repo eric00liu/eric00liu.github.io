@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>go module 使用 | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a type="text/html" href="/about.html">About</a></h6>
+
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  February 13, 2019
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/go/'>go</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">go module 使用</h1>
+  <section class="post-content article-entry">
+    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ make -p ~/project/hello</span><br><span class="line">$ cd ~/project/hello</span><br><span class="line">$ go mod init hello</span><br></pre></td></tr></table></figure>
+<h4 id="创建main-go"><a href="#创建main-go" class="headerlink" title="创建main.go"></a>创建main.go</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">	&quot;rsc.io/quote&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	fmt.Println(quote.Hello())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="执行go-build"><a href="#执行go-build" class="headerlink" title="执行go build"></a>执行go build</h4><p>因为目录下有go.mod文件，如果go命令版本&gt;=1.11，则自动下载依赖模块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ go build</span><br><span class="line">go: finding golang.org/x/text v0.0.0-20170915032832-14c0d48ead0c</span><br><span class="line">go: downloading rsc.io/sampler v1.3.0</span><br><span class="line">go: downloading golang.org/x/text v0.0.0-20170915032832-14c0d48ead0c</span><br></pre></td></tr></table></figure></p>
+<h4 id="go-mod里包含有所有模块的依赖"><a href="#go-mod里包含有所有模块的依赖" class="headerlink" title="go.mod里包含有所有模块的依赖"></a>go.mod里包含有所有模块的依赖</h4><p>在执行go build的时候，会根据main.go代码中引入的模块，自动执行go get和修改go.mod文件<br>也就是说，只需要在代码里引入模块，并不需要再管其他什么事情。</p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2019/03/06/butteraugli图片清晰度模型/">
+        ← prev <!--butteraugli 图片清晰度衡量工具-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2019/01/25/字幕自动生成-autosub/">
+        <!--字幕自动生成-autosub--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zODI4NS8xNDgxMw==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2019 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> </section>
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274257392'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274257392%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-122301641-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
+    </body>
+</html>
+
+

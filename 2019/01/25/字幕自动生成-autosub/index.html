@@ -86,6 +86,10 @@
 
 <nav class="pagination" role="pagination">
     
+    <a class="newer-posts" href="/2019/02/13/gomod/">
+        ← prev <!--go module 使用-->
+    </a>
+    
     <span class="page-number">•</span>
     
     <a class="older-posts" href="/2019/01/23/python-requests/">
@@ -128,6 +132,17 @@
             ga('create', 'UA-122301641-1', 'auto');
             ga('send', 'pageview');
         </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
     </body>
 </html>
 

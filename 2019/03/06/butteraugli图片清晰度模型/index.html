@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>butteraugli 图片清晰度衡量工具 | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a type="text/html" href="/about.html">About</a></h6>
+
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  March 6, 2019
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/JPEG/'>JPEG</a> 
+    
+      <a href='/tags/清晰度/'>清晰度</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">butteraugli 图片清晰度衡量工具</h1>
+  <section class="post-content article-entry">
+    <pre class="mermaid">graph LR
+A[main]
+B[ButteraugliDiffmap]
+C[ButteraugliComparator]
+D[OpsinDynamicsImage]
+E[SeparateFrequencies]
+F[Diffmap]
+
+A --> B
+B --> C
+C --> D
+C --> E
+B --> F</pre>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ButteraugliDiffmap(rgb0, rgb1, hf_asymmetry, diffmap);  </span><br><span class="line">rgb0: 图像<span class="number">1</span></span><br><span class="line">rgb1: 图像<span class="number">2</span></span><br><span class="line">hf_asymmery: 参数为<span class="number">1</span>，意义不明</span><br><span class="line">diffmap：传址进去，用来存储<span class="number">2</span>张图像的差值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">ButteraugliComparator <span class="title">butteraugli</span><span class="params">(rgb0_image, hf_asymmetry)</span></span>;</span><br><span class="line">rgb0_image: 图像<span class="number">1</span></span><br><span class="line">hf_asymmery: 参数为<span class="number">1</span>，意义不明</span><br><span class="line">用rgb0来初始化好butteraugli变量</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;ImageF&gt; xyb0 = OpsinDynamicsImage(rgb0);</span><br><span class="line">此函数里，先高斯模糊了rgb0的三通道，根据此图像，基于google的模型来修正gamma值。</span><br><span class="line">为什么要修正gamma值，做这一步的意义是什么，是因为Google认为yuv变换到rgb时，针对红黄蓝三色，不能用同一个gamma值来做变换，因为人眼对于这三色的敏感程度不同，人眼对蓝色分辨率最低，因此使用新的gamma值重新计算出了xyb0。</span><br><span class="line"></span><br><span class="line">SeparateFrequencies(xsize_, ysize_, xyb0, pi0_)</span><br><span class="line">- 第一步在边缘加入了更多的能量，这样边缘跟背景就能更准确的区分开</span><br><span class="line">- 第二步基于在红和绿的高频通道里亮度信息的变化，来进行压缩, 即先压缩红绿的高频信息...</span><br><span class="line">- 第三步将xyb的低频信息转换成val空间，这样方便后续对低频进行简单的平方和差分。</span><br><span class="line">pi0传址进去，即为<span class="number">3</span>步后的计算结果。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">butteraugli.Diffmap(rgb1_image, result_image)</span><br></pre></td></tr></table></figure>
+<p>ButteraugliComparator()</p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2019/02/13/gomod/">
+        <!--go module 使用--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zODI4NS8xNDgxMw==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2019 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> </section>
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274257392'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274257392%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-122301641-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
+    </body>
+</html>
+
+

@@ -42,7 +42,49 @@
         
 <section id="{{id}}" class="{{post_class}}">
   <h3 class="post-title">
-  <a href="/2018/08/17/v-charts/">v-charts教程</a>
+  <a href="/2018/09/17/methodAndtheory/">方法与理论</a>
+  
+  <span class="separator"> &middot; </span>
+  
+  September 17, 2018
+  
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/投资/'>投资</a> 
+    
+    </saan>
+  
+  </h3>
+</section>
+
+<section id="{{id}}" class="{{post_class}}">
+  <h3 class="post-title">
+  <a href="/2018/09/14/最快搭建可以上手的科学计算库/">最快搭建可以上手的科学计算库（python）</a>
+  
+  <span class="separator"> &middot; </span>
+  
+  September 14, 2018
+  
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/python/'>python</a> 
+    
+      <a href='/tags/科学计算/'>科学计算</a> 
+    
+      <a href='/tags/numpy/'>numpy</a> 
+    
+    </saan>
+  
+  </h3>
+</section>
+
+<section id="{{id}}" class="{{post_class}}">
+  <h3 class="post-title">
+  <a href="/2018/08/17/bootstrap/">bootstrap教程</a>
   
   <span class="separator"> &middot; </span>
   
@@ -65,7 +107,7 @@
 
 <section id="{{id}}" class="{{post_class}}">
   <h3 class="post-title">
-  <a href="/2018/08/17/bootstrap/">bootstrap教程</a>
+  <a href="/2018/08/17/v-charts/">v-charts教程</a>
   
   <span class="separator"> &middot; </span>
   
@@ -178,33 +220,6 @@
 
 <section id="{{id}}" class="{{post_class}}">
   <h3 class="post-title">
-  <a href="/2018/07/06/storm/">storm系统搭建</a>
-  
-  <span class="separator"> &middot; </span>
-  
-  July 6, 2018
-  
-  
-    <span class="taglist">  &middot; 
-    
-    
-      <a href='/tags/异常检测/'>异常检测</a> 
-    
-      <a href='/tags/storm/'>storm</a> 
-    
-      <a href='/tags/nimubs/'>nimubs</a> 
-    
-      <a href='/tags/k8s/'>k8s</a> 
-    
-      <a href='/tags/docker/'>docker</a> 
-    
-    </saan>
-  
-  </h3>
-</section>
-
-<section id="{{id}}" class="{{post_class}}">
-  <h3 class="post-title">
   <a href="/2018/07/06/htmliframetest/">htmltest</a>
   
   <span class="separator"> &middot; </span>
@@ -232,30 +247,7 @@
 
 <section id="{{id}}" class="{{post_class}}">
   <h3 class="post-title">
-  <a href="/2018/07/06/vuejs/">vuejs教程</a>
-  
-  <span class="separator"> &middot; </span>
-  
-  July 6, 2018
-  
-  
-    <span class="taglist">  &middot; 
-    
-    
-      <a href='/tags/前端/'>前端</a> 
-    
-      <a href='/tags/教程/'>教程</a> 
-    
-      <a href='/tags/vue/'>vue</a> 
-    
-    </saan>
-  
-  </h3>
-</section>
-
-<section id="{{id}}" class="{{post_class}}">
-  <h3 class="post-title">
-  <a href="/2018/07/06/influxdb/">influxdb使用</a>
+  <a href="/2018/07/06/storm/">storm系统搭建</a>
   
   <span class="separator"> &middot; </span>
   
@@ -299,6 +291,17 @@
             ga('create', 'UA-122301641-1', 'auto');
             ga('send', 'pageview');
         </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
     </body>
 </html>
 
