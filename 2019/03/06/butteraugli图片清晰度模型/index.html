@@ -47,13 +47,13 @@
     <span class="taglist">  &middot; 
     
     
+      <a href='/tags/编解码/'>编解码</a> 
+    
       <a href='/tags/清晰度/'>清晰度</a> 
     
       <a href='/tags/图片/'>图片</a> 
     
       <a href='/tags/视频/'>视频</a> 
-    
-      <a href='/tags/编解码/'>编解码</a> 
     
     </span>
   
@@ -68,7 +68,7 @@
 <p>Lf - 根据空间低频特征做的色彩建模</p>
 <p>Diffmap - 到集群并在图像之间构建错误图像</p>
 <p>Blur - 平滑代码</p>
-<p><pre class="mermaid">graph LR<br>A[main]<br>B[ButteraugliDiffmap]<br>C[ButteraugliComparator]<br>D[OpsinDynamicsImage]<br>E[SeparateFrequencies]<br>F[Diffmap]<br>G[SeparateFrequencies]<br>H[DiffmapPsychoImage]<br>I[OpsinDynamicsImage]<br>A–&gt;B<br>B –&gt; C<br>C –&gt; D<br>D –&gt; E<br>B –&gt; F<br>F –&gt; I<br>F –&gt; H<br>I –&gt; G</pre><br><img src="butteraugli-01.png" alt=""></p>
+<p><pre class="mermaid">graph LR<br>A[main]<br>B[ButteraugliDiffmap]<br>C[ButteraugliComparator]<br>D[OpsinDynamicsImage]<br>E[SeparateFrequencies]<br>F[Diffmap]<br>G[SeparateFrequencies]<br>H[DiffmapPsychoImage]<br>I[OpsinDynamicsImage]<br>A–&gt;B<br>B –&gt; C<br>C –&gt; D<br>D –&gt; E<br>B –&gt; F<br>F –&gt; I<br>F –&gt; H<br>I –&gt; G</pre><br><img src="/butteraugli-01.png" alt=""></p>
 <p>其中ButteraugliComparator耗时占比32.2%，主要工作是将第0张图像进行了处理，即opsin处理和separateFrequencies变换。<br>其中Diffmap耗时66.9%，主要工作是将第1张图像进行了处理，处理方式跟第0张相同，然后还把这两张进行了diff运算，即OpsinDynamicsImage函数，该函数耗时占比33.3%。   </p>
 <h3 id="关键函数分析"><a href="#关键函数分析" class="headerlink" title="关键函数分析"></a>关键函数分析</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ButteraugliDiffmap(rgb0, rgb1, hf_asymmetry, diffmap);  </span><br><span class="line">rgb0: 图像<span class="number">1</span></span><br><span class="line">rgb1: 图像<span class="number">2</span></span><br><span class="line">hf_asymmery: 参数为<span class="number">1</span>，意义不明</span><br><span class="line">diffmap：传址进去，用来存储<span class="number">2</span>张图像的差值</span><br></pre></td></tr></table></figure>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ButteraugliComparator <span class="title">butteraugli</span><span class="params">(rgb0_image, hf_asymmetry)</span></span>;</span><br><span class="line">rgb0_image: 图像<span class="number">1</span></span><br><span class="line">hf_asymmery: 参数为<span class="number">1</span>，意义不明</span><br><span class="line">用rgb0来初始化好butteraugli变量</span><br></pre></td></tr></table></figure>
