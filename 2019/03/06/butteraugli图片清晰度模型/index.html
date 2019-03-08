@@ -47,6 +47,8 @@
     <span class="taglist">  &middot; 
     
     
+      <a href='/tags/编解码/'>编解码</a> 
+    
       <a href='/tags/JPEG/'>JPEG</a> 
     
       <a href='/tags/清晰度/'>清晰度</a> 
@@ -54,8 +56,6 @@
       <a href='/tags/图片/'>图片</a> 
     
       <a href='/tags/视频/'>视频</a> 
-    
-      <a href='/tags/编解码/'>编解码</a> 
     
     </span>
   
@@ -70,29 +70,13 @@
 <p>Lf - 根据空间低频特征做的色彩建模</p>
 <p>Diffmap - 到集群并在图像之间构建错误图像</p>
 <p>Blur - 平滑代码</p>
-<pre class="mermaid">graph LR
-A[main]
-B[ButteraugliDiffmap]
-C[ButteraugliComparator]
-D[OpsinDynamicsImage]
-E[SeparateFrequencies]
-F[Diffmap]
-G[SeparateFrequencies]
-H[DiffmapPsychoImage]
-A --> B
-B --> C
-C --> D
-C --> E
-B --> F
-F --> G
-F --> H</pre>
-
+<p><pre class="mermaid">graph LR<br>A[main]<br>B[ButteraugliDiffmap]<br>C[ButteraugliComparator]<br>D[OpsinDynamicsImage]<br>E[SeparateFrequencies]<br>F[Diffmap]<br>G[SeparateFrequencies]<br>H[DiffmapPsychoImage]<br>I[OpsinDynamicsImage]<br>A –&gt; B<br>B –&gt; C<br>C –&gt; D<br>D –&gt; E<br>B –&gt; F<br>F –&gt; I<br>F –&gt; H<br>I –&gt; G</pre><br>其中ButteraugliComparator耗时占比32.2%，主要工作是将第0张图像进行了处理，即opsin处理和separateFrequencies变换。<br>其中Diffmap耗时66.9%，主要工作是将第1张图像进行了处理，处理方式跟第0张相同，然后还把这两张进行了diff运算，即OpsinDynamicsImage函数，该函数耗时占比33.3%。</p>
 <h3 id="关键函数分析"><a href="#关键函数分析" class="headerlink" title="关键函数分析"></a>关键函数分析</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ButteraugliDiffmap(rgb0, rgb1, hf_asymmetry, diffmap);  </span><br><span class="line">rgb0: 图像<span class="number">1</span></span><br><span class="line">rgb1: 图像<span class="number">2</span></span><br><span class="line">hf_asymmery: 参数为<span class="number">1</span>，意义不明</span><br><span class="line">diffmap：传址进去，用来存储<span class="number">2</span>张图像的差值</span><br></pre></td></tr></table></figure>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ButteraugliComparator <span class="title">butteraugli</span><span class="params">(rgb0_image, hf_asymmetry)</span></span>;</span><br><span class="line">rgb0_image: 图像<span class="number">1</span></span><br><span class="line">hf_asymmery: 参数为<span class="number">1</span>，意义不明</span><br><span class="line">用rgb0来初始化好butteraugli变量</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;ImageF&gt; xyb0 = OpsinDynamicsImage(rgb0);</span><br><span class="line">此函数里，先高斯模糊了rgb0的三通道，根据此图像，基于google的模型来修正gamma值。</span><br><span class="line">为什么要修正gamma值，做这一步的意义是什么，是因为Google认为yuv变换到rgb时，针对红黄蓝三色，不能用同一个gamma值来做变换，因为人眼对于这三色的敏感程度不同，人眼对蓝色分辨率最低，因此使用新的gamma值重新计算出了xyb0。</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;ImageF&gt; xyb0 = OpsinDynamicsImage(rgb0);</span><br><span class="line">此函数里，先高斯模糊了rgb0的三通道，然后修正图像gamma值。</span><br><span class="line">为什么要修正gamma值，做这一步的意义是什么，是因为yuv变换到rgb时，针对红黄蓝三色不能用同一个gamma值来做变换，因为人眼对于这三色的敏感程度不同，人眼对蓝色分辨率最低，因此使用调整后的gamma值重新计算图像rgb。</span><br><span class="line">该函数再重新计算出rgb后，再映射到了xyb的色彩空间上。</span><br></pre></td></tr></table></figure>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SeparateFrequencies(xsize_, ysize_, xyb0, pi0_)</span><br><span class="line">- 第一步在边缘加入了更多的能量，这样边缘跟背景就能更准确的区分开</span><br><span class="line">- 第二步基于在红和绿的高频通道里亮度信息的变化，来进行压缩, 即先压缩红绿的高频信息...</span><br><span class="line">- 第三步将xyb的低频信息转换成val空间，这样方便后续对低频进行简单的平方和差分。</span><br><span class="line">pi0传址进去，即为<span class="number">3</span>步后的计算结果。</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">butteraugli.Diffmap(rgb1_image, result_image)</span><br><span class="line">result_image即ButteraugliComparator处理过后的图片。</span><br><span class="line">- 第一步把rgb1放进SeparateFrequencies进行处理， 但没有用OpsinDynamicsImage做gamma校正。</span><br><span class="line">- 第二步 把两张处理过的img放进DiffmapPsychoImage进行对比。</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DiffmapPsychoImage(pi1, result);</span><br><span class="line">pi1是只经过SeparateFrequencies处理过的图像，result是经历过OpsinDynamicsImage和SeparateFrequencies的图像。</span><br><span class="line">这两个图像经过一系列复杂的比较之后，最终diff的结果会存储回result里。</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">butteraugli.Diffmap(rgb1_image, result_image)</span><br><span class="line">result_image即ButteraugliComparator处理过后的图片。</span><br><span class="line">- 第一步把rgb1放进OpsinDynamicsImage进行处理，做gamma校正。</span><br><span class="line">- 第二步把校正后的xyb1放进SeparateFrequencies处理，其实跟第一张图处理流程一样。</span><br><span class="line">- 第三步把两张处理过的img放进DiffmapPsychoImage进行对比。</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DiffmapPsychoImage(pi1, result);</span><br><span class="line">这两个图像经过一系列复杂的比较之后，最终diff的结果会存储回result里。</span><br></pre></td></tr></table></figure>
 
   </section>
   <footer class="post-footer">
@@ -151,7 +135,7 @@ F --> H</pre>
         </script>
 
         <{% if (theme.mermaid.enable)  %}>
-          <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+          <script src='http://cdn.bootcss.com/mermaid/7.1.2/mermaid.min.js'></script>
           <script>
             if (window.mermaid) {
               mermaid.initialize({theme: 'forest'});
