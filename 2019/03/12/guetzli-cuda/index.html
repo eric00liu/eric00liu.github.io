@@ -8,7 +8,7 @@
         <link rel="shortcut icon" href="/ericliu.png"/>
         <link rel="canonical" href="http://guolinn.com/">
         <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
-        <title>vuejs教程 | EricLiu</title>
+        <title>利用cuda和opencl来加速guetzli | EricLiu</title>
         <meta name="description" content="{{meta_description}}">
 
         <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
@@ -42,28 +42,43 @@
         
 
 <article class="post">
-  July 6, 2018
+  March 12, 2019
   
     <span class="taglist">  &middot; 
     
     
-      <a href='/tags/前端/'>前端</a> 
+      <a href='/tags/编解码/'>编解码</a> 
     
-      <a href='/tags/教程/'>教程</a> 
+      <a href='/tags/图片/'>图片</a> 
     
-      <a href='/tags/vue/'>vue</a> 
+      <a href='/tags/guetzli/'>guetzli</a> 
+    
+      <a href='/tags/cuda/'>cuda</a> 
+    
+      <a href='/tags/opengl/'>opengl</a> 
     
     </span>
   
 
-  <h1 class="post-title">vuejs教程</h1>
+  <h1 class="post-title">利用cuda和opencl来加速guetzli</h1>
   <section class="post-content article-entry">
-    <h3 id="安装vue2-0"><a href="#安装vue2-0" class="headerlink" title="安装vue2.0"></a>安装vue2.0</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g vue-cli</span><br><span class="line">sudo npm install -g webpack</span><br></pre></td></tr></table></figure>
-<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue init webpack firstproject</span><br></pre></td></tr></table></figure>
-<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vue install</span><br><span class="line">vue install --production</span><br></pre></td></tr></table></figure>
-<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run dev</span><br></pre></td></tr></table></figure>
-<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
-<p>编译出来的dist目录，可以放到web服务器里，直接就访问了</p>
+    <p>利用cuda opencl加速guetzli的项目地址是： <a href="https://github.com/ianhuang-777/guetzli-cuda-opencl" target="_blank" rel="noopener">https://github.com/ianhuang-777/guetzli-cuda-opencl</a></p>
+<h4 id="找一台支持cuda的机器，并安装好GPU驱动"><a href="#找一台支持cuda的机器，并安装好GPU驱动" class="headerlink" title="找一台支持cuda的机器，并安装好GPU驱动"></a>找一台支持cuda的机器，并安装好GPU驱动</h4><p>略</p>
+<h4 id="使用cuda-docker，而不在本机安装cuda"><a href="#使用cuda-docker，而不在本机安装cuda" class="headerlink" title="使用cuda-docker，而不在本机安装cuda"></a>使用cuda-docker，而不在本机安装cuda</h4><p>在启动docker时，将guetzli项目引入进去。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it</span><br></pre></td></tr></table></figure></p>
+<h4 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h4><p>进入docker之后，需要安装几项工具<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install libpng-dev</span><br><span class="line">apt install pkg-config</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改premake5-lua"><a href="#修改premake5-lua" class="headerlink" title="修改premake5.lua"></a>修改premake5.lua</h4><p>premake5是一个跨平台编译系统，通过lua脚本来生成适用于各个平台的编译脚本，linux平台生成Makefile，win平台生成vcproj文件</p>
+<ul>
+<li>Edit <code>premake5.lua</code>, add <code>$(CUDA_PATH)\include</code> to includedirs under workspace “guetzli”, add <code>defines { &quot;__USE_CUDA__&quot; }</code> and <code>links { &quot;cuda&quot; }</code> under <code>filter &quot;action:gmake&quot;</code>. Then do <code>premake5 --os=linux gmake</code> to update the makefile.</li>
+<li>Edit <code>clguetzli/clguetzli.cl</code> and add `#define <strong>USE_CUDA</strong> at first line.</li>
+</ul>
+<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><ul>
+<li>Run <code>make</code> and wait the binary to be created in <code>bin/Release/guetzli</code>.</li>
+<li>mkdir -p </li>
+<li>Run <code>./compile.sh 64</code> or <code>./compile.sh 32</code> to build the 64 or 32 bits <a href="http://docs.nvidia.com/cuda/parallel-thread-execution" target="_blank" rel="noopener">ptx</a> file, and the ptx file will be copied to <code>bin/Release/clguetzli</code>.</li>
+</ul>
+<p>如果编译时遇到什么问题，记得再次编译前用make clean清理环境。</p>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>编译成功后，会生成可执行文件在bin/Release/guetzli，找一张图片测试一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/Release/guetzli --cuda 1.jpg 1_out.jpg</span><br></pre></td></tr></table></figure></p>
+<p>可以比较一下两张图片的清晰度和size。</p>
 
   </section>
   <footer class="post-footer">
@@ -78,14 +93,10 @@
 
 <nav class="pagination" role="pagination">
     
-    <a class="newer-posts" href="/2018/07/13/flink/">
-        ← prev <!--flink搭建-->
-    </a>
-    
     <span class="page-number">•</span>
     
-    <a class="older-posts" href="/2018/07/06/htmliframetest/">
-        <!--htmltest--> next →
+    <a class="older-posts" href="/2019/03/11/guetzli编码器/">
+        <!--guetzli更高压缩比的jepg编码器--> next →
     </a>
     
 </nav>
