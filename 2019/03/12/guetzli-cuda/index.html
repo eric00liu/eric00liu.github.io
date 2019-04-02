@@ -63,22 +63,34 @@
   <h1 class="post-title">利用cuda和opencl来加速guetzli</h1>
   <section class="post-content article-entry">
     <p>利用cuda opencl加速guetzli的项目地址是： <a href="https://github.com/ianhuang-777/guetzli-cuda-opencl" target="_blank" rel="noopener">https://github.com/ianhuang-777/guetzli-cuda-opencl</a></p>
-<h4 id="找一台支持cuda的机器，并安装好GPU驱动"><a href="#找一台支持cuda的机器，并安装好GPU驱动" class="headerlink" title="找一台支持cuda的机器，并安装好GPU驱动"></a>找一台支持cuda的机器，并安装好GPU驱动</h4><p>略</p>
+<h2 id="使用cuda来加速guetzli"><a href="#使用cuda来加速guetzli" class="headerlink" title="使用cuda来加速guetzli"></a>使用cuda来加速guetzli</h2><h4 id="找一台支持cuda的机器，并安装好GPU驱动"><a href="#找一台支持cuda的机器，并安装好GPU驱动" class="headerlink" title="找一台支持cuda的机器，并安装好GPU驱动"></a>找一台支持cuda的机器，并安装好GPU驱动</h4><p>略</p>
 <h4 id="使用cuda-docker，而不在本机安装cuda"><a href="#使用cuda-docker，而不在本机安装cuda" class="headerlink" title="使用cuda-docker，而不在本机安装cuda"></a>使用cuda-docker，而不在本机安装cuda</h4><p>在启动docker时，将guetzli项目引入进去。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --runtime=nvidia -v /home/liu/code/guetzli-cuda-opencl:/guetzli nvdia/cuda:9.0-devel</span><br></pre></td></tr></table></figure></p>
-<h4 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h4><p>进入docker之后，需要安装几项工具<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install libpng-dev</span><br><span class="line">apt install pkg-config</span><br></pre></td></tr></table></figure></p>
+<h4 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h4><p>进入docker之后，需要安装几项依赖<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt install libpng-dev</span><br><span class="line">apt install pkg-config</span><br></pre></td></tr></table></figure></p>
 <h4 id="修改premake5-lua"><a href="#修改premake5-lua" class="headerlink" title="修改premake5.lua"></a>修改premake5.lua</h4><p>premake5是一个跨平台编译系统，通过lua脚本来生成适用于各个平台的编译脚本，linux平台生成Makefile，win平台生成vcproj文件</p>
 <ul>
 <li>Edit <code>premake5.lua</code>, add <code>$(CUDA_PATH)\include</code> to includedirs under workspace “guetzli”, add <code>defines { &quot;__USE_CUDA__&quot; }</code> and <code>links { &quot;cuda&quot; }</code> under <code>filter &quot;action:gmake&quot;</code>. Then do <code>premake5 --os=linux gmake</code> to update the makefile.</li>
-<li>Edit <code>clguetzli/clguetzli.cl</code> and add `#define <strong>USE_CUDA</strong> at first line.</li>
+<li>Edit <code>clguetzli/clguetzli.cl</code> and add <code>#define __USE_CUDA__</code> at first line.</li>
 </ul>
 <h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><ul>
 <li>Run <code>make</code> and wait the binary to be created in <code>bin/Release/guetzli</code>.</li>
-<li>mkdir -p </li>
+<li>mkdir -p bin/Release/clguetzli/</li>
 <li>Run <code>./compile.sh 64</code> or <code>./compile.sh 32</code> to build the 64 or 32 bits <a href="http://docs.nvidia.com/cuda/parallel-thread-execution" target="_blank" rel="noopener">ptx</a> file, and the ptx file will be copied to <code>bin/Release/clguetzli</code>.</li>
 </ul>
 <p>如果编译时遇到什么问题，记得再次编译前用make clean清理环境。</p>
 <h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>编译成功后，会生成可执行文件在bin/Release/guetzli，找一张图片测试一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/Release/guetzli --cuda 1.jpg 1_out.jpg</span><br></pre></td></tr></table></figure></p>
 <p>可以比较一下两张图片的清晰度和size。</p>
+<h2 id="如果无法使用cuda，可以使用opencl来加速guetzli"><a href="#如果无法使用cuda，可以使用opencl来加速guetzli" class="headerlink" title="如果无法使用cuda，可以使用opencl来加速guetzli"></a><del>如果无法使用cuda，可以使用opencl来加速guetzli</del></h2><h4 id="找一台支持opencl的机器"><a href="#找一台支持opencl的机器" class="headerlink" title="找一台支持opencl的机器"></a>找一台支持opencl的机器</h4><p>其实intel和AMD基本都支持了opencl, 所以任意一台都可以。</p>
+<h4 id="使用opencl-docker，而不在本机安装opencl"><a href="#使用opencl-docker，而不在本机安装opencl" class="headerlink" title="使用opencl-docker，而不在本机安装opencl"></a>使用opencl-docker，而不在本机安装opencl</h4><p>在启动docker时，将guetzli项目引入进去。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v /Users/liu/code/guetzli-cuda-opencl:/guetzli  pkienzle/opencl_docker bash</span><br></pre></td></tr></table></figure></p>
+<h4 id="安装依赖-1"><a href="#安装依赖-1" class="headerlink" title="安装依赖"></a>安装依赖</h4><p>进入docker之后，需要安装几项依赖<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt install libpng-dev</span><br><span class="line">apt install pkg-config</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改premake5-lua-1"><a href="#修改premake5-lua-1" class="headerlink" title="修改premake5.lua"></a>修改premake5.lua</h4><p>premake5是一个跨平台编译系统，通过lua脚本来生成适用于各个平台的编译脚本，linux平台生成Makefile，win平台生成vcproj文件</p>
+<p>注意：pkienzle/opencl_docker里没有opencl的include文件夹，需要从其他地方拷贝过来，<br>且还需要设置LIBRARY_PATH</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/intel/opencl-1.2-6.4.0.25/include</span><br><span class="line">cp -rf guetzli/CL /opt/intel/opencl-1.2-6.4.0.25/include</span><br><span class="line">export LIBRARY_PATH=$LIBRARY_PATH:/opt/intel/opencl-1.2-6.4.0.25/lib64/</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Edit <code>premake5.lua</code>, add <code>$(OPENCL_SDK_PATH)\include</code> to includedirs under workspace “guetzli”, add <code>defines { &quot;__USE_OPENCL__&quot; }</code> and <code>links { &quot;**&quot; }</code> under <code>filter &quot;action:gmake&quot;</code>. Then execute <code>premake5 --os=linux gmake</code> to update the makefile.</li>
+<li>Edit <code>clguetzli/clguetzli.cl</code> and add <code>#define __USE_OPENCL__</code> at first line.</li>
+<li>Run <code>make</code> and wait the binary to be created in <code>bin/Release/guetzli</code>.</li>
+<li>Copy <code>clguetzli/clguetzli.cl</code> to <code>bin/Release/clguetzli</code> before running.</li>
+</ul>
 
   </section>
   <footer class="post-footer">
@@ -92,6 +104,10 @@
 </article>
 
 <nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2019/03/27/trellis_quantize/">
+        ← prev <!--trellis quantize-->
+    </a>
     
     <span class="page-number">•</span>
     

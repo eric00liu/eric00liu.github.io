@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>trellis quantize | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a type="text/html" href="/about.html">About</a></h6>
+
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  March 27, 2019
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/编解码/'>编解码</a> 
+    
+      <a href='/tags/清晰度/'>清晰度</a> 
+    
+      <a href='/tags/DCT/'>DCT</a> 
+    
+      <a href='/tags/量化/'>量化</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">trellis quantize</h1>
+  <section class="post-content article-entry">
+    <p>mozjpeg项目下<br>jcdctmgr.c:<br>quantize_trellis()</p>
+<p>引文：<br><a href="http://akuvian.org/src/x264/trellis.txt" target="_blank" rel="noopener">http://akuvian.org/src/x264/trellis.txt</a></p>
+<p>引文：<br><a href="http://webcache.googleusercontent.com/search?q=cache:SzMsyBwg0FcJ:cbloomrants.blogspot.com/2009/05/05-15-09-trellis-quantization.html+&amp;cd=11&amp;hl=zh-CN&amp;ct=clnk&amp;gl=hk" target="_blank" rel="noopener">http://webcache.googleusercontent.com/search?q=cache:SzMsyBwg0FcJ:cbloomrants.blogspot.com/2009/05/05-15-09-trellis-quantization.html+&amp;cd=11&amp;hl=zh-CN&amp;ct=clnk&amp;gl=hk</a></p>
+<h3 id="05-15-09-Trellis-Quantization"><a href="#05-15-09-Trellis-Quantization" class="headerlink" title="05-15-09 - Trellis Quantization"></a>05-15-09 - Trellis Quantization</h3><p>There’s a big gap in all technical literature. You can pretty easily find hand-wavey overviews of things for non-specialists in any field that make your feel all happy, but don’t get into any details so they’re useless if you actually need to do something in that field. Then there’s also an abundance of technical papers that are steeped in the terminology and notation of that particular sub-field and are completely opaque. It’s almost impossible to find transition material.<br>One case of this for me was so-called “Trellis Quantization”. Part of the problem was that there’s a whole body of old literature on “trellis coded quantization” which is an entirely different thing. TCQ is about designing non-linear or VQ quantizers for sources. Almost all of that research from the old days is totally worthless, because it assumed <em>NO ENTROPY CODING</em> on the post-quantization coefficients. Thus it was trying to make quantization buckets which had equal probability. Even at the time that research was happening it was already pointless, but it’s especially pointlessnow. We know that in the presence of an entropy coder, independent variables are R-D optimal with a fix-step-size deadzone quantizer.</p>
+<p>But in the real world our entropy coder is not independent. That is, we use things like run length codes, or adaptive arithmetic coders, or other schemes, such that the way we code one variable affects the code length for the next variable. This is where so-called “trellis quantization” in the modern sense comes in.</p>
+<p>I really hate the modern use of the term “trellis quantization” because it’s really not about the trellis or the quantization. A better term would be “dynamic programming code stream output optimization”. If somebody had just told me that’s what it was at the beginning it would have saved me weeks of confusion. It’s basically the same thing you do in an LZ optimal parser (though not exactly).</p>
+<p>This technique is used mainly in lossy image coders to optimize the coding of a certain bunch of pixels. It can be used for bitplane truncation in zerotree type coders, but it’s mainly used for block-transforms, and mainly for video coders (it was made prominent in H263 and is used in H264).</p>
+<p>Basically it goes like this : for a given block, you do normal quantization and you get a bunch of coefficients like {17,3,9,4,0,1,2,0}. You could just output that, and you would have a certain rate and distortion. But you could also change some of those coefficients. That would dicrease your rate and increase your distortion. (note that the increase in distortion may be very small in some cases - if the original values were very close to a quantization bucket edge, then you can shift them without much pain). You might be able to output a better Rate-Distortion optimal block by choosing some other output, such as {17,3,9,4,0,1,1,0} or {17,0,8,4,0,0,0,0} depending on where you are on the R-D curve.</p>
+<p>The “trellis” comes in because you don’t need to consider all possible outputs. It’s easiest to think of like this :</p>
+<p>Say you have 4 binary coding decisions. That is, you could make choices 0000 or 0001, etc. there are 16 possible choices. Naively, you would have to consider all 16 sequences and rate each one and pick the best. If you draw this as a graph, it looks like a tree - each node has two kids, it branches out and you have 16 leaves. But in many coding scenarios, your current coding cost does not depend on the entire history of your sequence - it only depends on the current state. For example, say you are doing order-1 context modeling and binary arithmetic encoding. Then there is a cost to encode a 0 after a 0, a 0 after a 1, a 1 after 0 and a 1 after a 1 (c00,c01,c10,c11). Each path in the graph is a coding action. The graph you need to consider is like this :</p>
+<p> [ 1 ]—-[ 1 ]—-[ 1 ]—-[ 1 ]<br> /     \  /     \  /     \  /     \<br>/       \/       \/       \/       \<br>\       /\       /\       /\       /<br> \     /  \     /  \     /  \     /<br> [ 0 ]—-[ 0 ]—-[ 0 ]—-[ 0 ]</p>
+<p>you start at the far left, as you go along each edge that’s a coding output. Any given state, it doesn’t matter how you got there, the transitions out of it have the same cost regardless of history. To fill out the graph you start on the far left with a cost of zero, you walk each link, and you fill in the node if the cost you are carrying is lower than what’s already in there. Each node only needs to remember the cheapest way to get to that node.<br>To find the optimal coding you start at the far right and you walk backwards along the links that led you to the cheapest cost.</p>
+<p>This graph looks like a “trellis” so these kind of problems are called “trellis quantization” or “joint trellis subband optimization” or whatever. The key thing about the trellis shape is that for N coding decisions the size of the graph is O(K*N) (if there are K options at each decision point), whereas the full branching factor is K^N if you had to consider all possible sequences.</p>
+<p>This is apparently the “Viterbi algorithm” or some such thing but all the descriptions I’ve found of that are weird and confusing.</p>
+<p>For game developers, this is very similar to A<em> path finding. A</em> is actually a form of Lazy Dynamic Programming. Path finding has the character we need because the cost to go between two nodes only depends on those two nodes, not the whole history, thus at each node you only need to remember the shortest path to get to that node.</p>
+<p>In H264 this is a nice way to really optimize the output for a given block. It’s sort of weirdly called “quantization” because it often consists of jamming values to zero which is kind of like using a larger adaptive deadzone. I really don’t like that terminology, because it is in fact NOT a variable quantizer, since it doesn’t affect the reconstruction levels in the decoder at all.</p>
+<p>Note that in video coding this is a very small bit of a tiny optimization, and the rest of the optimization is a big heuristic mess. The total optimization looks something like this :</p>
+<p>Assign bit rate to various frames<br>  (try to optimize R-D ; meet channel overflow and buffer underflow constraints )</p>
+<p>Within a frame, assign bits to motion vectors vs. residuals &amp; control codes</p>
+<p>Iterate :</p>
+<pre><code>choose best motion vectors for current motion vector bit rate allocation
+
+optimize block mode decisions
+
+code residuals to given bit allocation
+
+    &quot;trellis&quot; optimize the coding of each block to a lagrangian R-D (R + lambda * D)
+
+oh and also iteratively search around on the lagrange multiplier lambda
+    to hit the rate you were supposed to
+
+then hold residuals constant and optimize block &amp; motion vector decisions for those residuals
+</code></pre><p>  then shift bit allocation between modes, residuals &amp; vectors &amp; repeat</p>
+<p>yuck. Oh, and of course per-block coding can’t really be independently optimized since context model state carries between blocks. And in intra frames blocks are used to predict other blocks, so if you change one it affects all future ones. Oh, and this optimization is super important.</p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2019/03/12/guetzli-cuda/">
+        <!--利用cuda和opencl来加速guetzli--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zODI4NS8xNDgxMw==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2019 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> </section>
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274257392'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274257392%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-122301641-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://cdn.bootcss.com/mermaid/7.1.2/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
+    </body>
+</html>
+
+
