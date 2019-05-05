@@ -72,7 +72,7 @@
 <p>看到这里的小伙伴，应该是真的需要用他来修复时间戳了，但这里有一个坑。    </p>
 <h3 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h3><p>用setpts转码过之后，再用ffprobe来看，发现转出来的视频pts跟你在setpts里算出来的不一样。<br>是因为ffmpeg默认在filter链里，帮你加了另外一个会改动pts的filter，那就是aresample。<br>可以看到日志里记录下了加fliter这一步骤</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[format_out_0_1 @ 0x2a89140]  auto-inserting filter &apos;auto_resampler_0&apos; between the filter &apos;Parsed_asetpts_0&apos; and the filter &apos;format_out_0_1&apos;</span><br></pre></td></tr></table></figure>
-<p>所以为了降低aresample对我们pts修复的影响，我们需要设置一下aresample这个参数，上面的例子，我加入了 aresample=async=1000 便是这个作用。<br>aresample怎么用，还是在文档里找吧 <a href="http://ffmpeg.org/ffmpeg-all.html" target="_blank" rel="noopener">http://ffmpeg.org/ffmpeg-all.html</a>   </p>
+<p>所以为了去掉aresample对我们pts修复的影响，我们需要设置一下aresample这个参数，上面的例子，我加入了 aresample=async=1000 便是这个作用。<br>aresample怎么用，还是在文档里找吧 <a href="http://ffmpeg.org/ffmpeg-all.html" target="_blank" rel="noopener">http://ffmpeg.org/ffmpeg-all.html</a>   </p>
 
   </section>
   <footer class="post-footer">

@@ -8,7 +8,7 @@
         <link rel="shortcut icon" href="/ericliu.png"/>
         <link rel="canonical" href="http://guolinn.com/">
         <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
-        <title>trellis quantize | EricLiu</title>
+        <title>网格量化-trellis quantize | EricLiu</title>
         <meta name="description" content="{{meta_description}}">
 
         <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
@@ -58,9 +58,11 @@
     </span>
   
 
-  <h1 class="post-title">trellis quantize</h1>
+  <h1 class="post-title">网格量化-trellis quantize</h1>
   <section class="post-content article-entry">
     <p>mozjpeg项目下<br>jcdctmgr.c:<br>quantize_trellis()</p>
+<p>引文：</p>
+<p>An overview of quantization in JPEG 2000    2.2. Trellis coded quantization</p>
 <p>引文：<br><a href="http://akuvian.org/src/x264/trellis.txt" target="_blank" rel="noopener">http://akuvian.org/src/x264/trellis.txt</a></p>
 <p>引文：<br><a href="http://webcache.googleusercontent.com/search?q=cache:SzMsyBwg0FcJ:cbloomrants.blogspot.com/2009/05/05-15-09-trellis-quantization.html+&amp;cd=11&amp;hl=zh-CN&amp;ct=clnk&amp;gl=hk" target="_blank" rel="noopener">http://webcache.googleusercontent.com/search?q=cache:SzMsyBwg0FcJ:cbloomrants.blogspot.com/2009/05/05-15-09-trellis-quantization.html+&amp;cd=11&amp;hl=zh-CN&amp;ct=clnk&amp;gl=hk</a></p>
 <h3 id="05-15-09-Trellis-Quantization"><a href="#05-15-09-Trellis-Quantization" class="headerlink" title="05-15-09 - Trellis Quantization"></a>05-15-09 - Trellis Quantization</h3><p>There’s a big gap in all technical literature. You can pretty easily find hand-wavey overviews of things for non-specialists in any field that make your feel all happy, but don’t get into any details so they’re useless if you actually need to do something in that field. Then there’s also an abundance of technical papers that are steeped in the terminology and notation of that particular sub-field and are completely opaque. It’s almost impossible to find transition material.<br>One case of this for me was so-called “Trellis Quantization”. Part of the problem was that there’s a whole body of old literature on “trellis coded quantization” which is an entirely different thing. TCQ is about designing non-linear or VQ quantizers for sources. Almost all of that research from the old days is totally worthless, because it assumed <em>NO ENTROPY CODING</em> on the post-quantization coefficients. Thus it was trying to make quantization buckets which had equal probability. Even at the time that research was happening it was already pointless, but it’s especially pointlessnow. We know that in the presence of an entropy coder, independent variables are R-D optimal with a fix-step-size deadzone quantizer.</p>
