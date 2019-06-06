@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>Go 1.11标准库 | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a type="text/html" href="/about.html">About</a></h6>
+
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  June 4, 2019
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/go/'>go</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Go 1.11标准库</h1>
+  <section class="post-content article-entry">
+    <h4 id="archive"><a href="#archive" class="headerlink" title="archive"></a>archive</h4><h5 id="import-“archive-tar”"><a href="#import-“archive-tar”" class="headerlink" title="import “archive/tar”"></a>import “archive/tar”</h5><p>可以将多个文件，以tar格式打包</p>
+<h5 id="import-“archive-zip”"><a href="#import-“archive-zip”" class="headerlink" title="import “archive/zip”"></a>import “archive/zip”</h5><p>可以将多个文件，以zip格式打包</p>
+<h5 id="import-“bufio”"><a href="#import-“bufio”" class="headerlink" title="import “bufio”"></a>import “bufio”</h5><p>可以把io.Reader做为入参，来做split等操作。 bytes，strings包里的split都不可以使用io.Reader，只能针对内存buf进行。</p>
+<h5 id="import-“compress-zlib”"><a href="#import-“compress-zlib”" class="headerlink" title="import “compress/zlib”"></a>import “compress/zlib”</h5><p>将io.Reader作为入参，使用zlib进行压缩，这个package里还有bzip2，flate，gzip， lzw，gzip，zlib压缩格式。提供的有通用的Reader和Writer接口。</p>
+<h5 id="import-“container-heap”"><a href="#import-“container-heap”" class="headerlink" title="import “container/heap”"></a>import “container/heap”</h5><p>heap实现了一个最小堆(或者最大堆，主要看你实现的swap接口)，可以将你的数组初始化为堆，还提供了Fix接口，使新增的元素也加入到堆里面。</p>
+<h5 id="import-“container-list”"><a href="#import-“container-list”" class="headerlink" title="import “container/list”"></a>import “container/list”</h5><p>双向链表</p>
+<h5 id="import-“container-ring”"><a href="#import-“container-ring”" class="headerlink" title="import “container/ring”"></a>import “container/ring”</h5><p>双向环</p>
+<h5 id="import-“context”"><a href="#import-“context”" class="headerlink" title="import “context”"></a>import “context”</h5><p>函数调用之间同步的一种方式</p>
+<h5 id="import-“crypto”"><a href="#import-“crypto”" class="headerlink" title="import “crypto”"></a>import “crypto”</h5><p>md5，sha1等等    其中tls包提供的有net接口，可以配置pem证书，并listen端口提供服务。</p>
+<h5 id="import-“database-sql”"><a href="#import-“database-sql”" class="headerlink" title="import “database/sql”"></a>import “database/sql”</h5><p>db接口，支持事务还有context，   db.Open()中，把driver作为入参传入即可。目前的driver，有mysql, ms sql, postgres, sqlite, hive, oracle, odbc, sybase 等等</p>
+<h5 id="import-“debug-dwarf”"><a href="#import-“debug-dwarf”" class="headerlink" title="import “debug/dwarf”"></a>import “debug/dwarf”</h5><p>读取可执行文件中的dwarf调试信息，还有elf，可以读取elf格式的可执行文件，各个端的内容。gosym读取符号表和重定向内容.</p>
+<h5 id="import-“encoding”"><a href="#import-“encoding”" class="headerlink" title="import “encoding”"></a>import “encoding”</h5><p>有encode和decode接口，可以编解码ascii85， asn1, base32, base64, binary, csv, gob, hex, json, pem, xml。gob是将go中的类型转换成二进制的一种格式。</p>
+<h5 id="import-“error”"><a href="#import-“error”" class="headerlink" title="import “error”"></a>import “error”</h5><p>只有New()和Error()接口</p>
+<h5 id="import-“expvar”"><a href="#import-“expvar”" class="headerlink" title="import “expvar”"></a>import “expvar”</h5><p>会开启http server接口，提供一个查看和修改应用内部变量的http接口，默认路径是/debug/vars</p>
+<h5 id="import-“flag”"><a href="#import-“flag”" class="headerlink" title="import “flag”"></a>import “flag”</h5><p>命令行参数解析</p>
+<h5 id="import-“fmt”"><a href="#import-“fmt”" class="headerlink" title="import “fmt”"></a>import “fmt”</h5><p>print和scan，类似于C里面的语法</p>
+<h5 id="import-“go”"><a href="#import-“go”" class="headerlink" title="import “go”"></a>import “go”</h5><p>ast 分析go代码的语法树，build </p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2019/05/27/iptables/">
+        <!--iptables常用方法--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zODI4NS8xNDgxMw==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2019 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> </section>
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274257392'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274257392%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-122301641-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://cdn.bootcss.com/mermaid/7.1.2/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
+    </body>
+</html>
+
+
