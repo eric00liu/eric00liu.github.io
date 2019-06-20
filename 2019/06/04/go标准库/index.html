@@ -54,7 +54,7 @@
 
   <h1 class="post-title">Go 1.11标准库</h1>
   <section class="post-content article-entry">
-    <h4 id="archive"><a href="#archive" class="headerlink" title="archive"></a>archive</h4><h5 id="import-“archive-tar”"><a href="#import-“archive-tar”" class="headerlink" title="import “archive/tar”"></a>import “archive/tar”</h5><p>可以将多个文件，以tar格式打包</p>
+    <h5 id="import-“archive-tar”"><a href="#import-“archive-tar”" class="headerlink" title="import “archive/tar”"></a>import “archive/tar”</h5><p>可以将多个文件，以tar格式打包</p>
 <h5 id="import-“archive-zip”"><a href="#import-“archive-zip”" class="headerlink" title="import “archive/zip”"></a>import “archive/zip”</h5><p>可以将多个文件，以zip格式打包</p>
 <h5 id="import-“bufio”"><a href="#import-“bufio”" class="headerlink" title="import “bufio”"></a>import “bufio”</h5><p>可以把io.Reader做为入参，来做split等操作。 bytes，strings包里的split都不可以使用io.Reader，只能针对内存buf进行。</p>
 <h5 id="import-“compress-zlib”"><a href="#import-“compress-zlib”" class="headerlink" title="import “compress/zlib”"></a>import “compress/zlib”</h5><p>将io.Reader作为入参，使用zlib进行压缩，这个package里还有bzip2，flate，gzip， lzw，gzip，zlib压缩格式。提供的有通用的Reader和Writer接口。</p>
@@ -70,8 +70,23 @@
 <h5 id="import-“expvar”"><a href="#import-“expvar”" class="headerlink" title="import “expvar”"></a>import “expvar”</h5><p>会开启http server接口，提供一个查看和修改应用内部变量的http接口，默认路径是/debug/vars</p>
 <h5 id="import-“flag”"><a href="#import-“flag”" class="headerlink" title="import “flag”"></a>import “flag”</h5><p>命令行参数解析</p>
 <h5 id="import-“fmt”"><a href="#import-“fmt”" class="headerlink" title="import “fmt”"></a>import “fmt”</h5><p>print和scan，类似于C里面的语法</p>
-<h5 id="import-“go”"><a href="#import-“go”" class="headerlink" title="import “go”"></a>import “go”</h5><p>ast 分析go代码的语法树，build </p>
-
+<h5 id="import-“go”"><a href="#import-“go”" class="headerlink" title="import “go”"></a>import “go”</h5><p>ast 分析go代码的语法树，build 环境变量，constant 各个类型的常量和运算符，doc 生成文档，format可以将语法正确的[]byte进行格式化。</p>
+<h5 id="import-“hash”"><a href="#import-“hash”" class="headerlink" title="import “hash”"></a>import “hash”</h5><p>有哈希算法adler32, crc32, crc64, fnv</p>
+<h5 id="import-“html”"><a href="#import-“html”" class="headerlink" title="import “html”"></a>import “html”</h5><p>有转义功能，html/template包 html渲染，</p>
+<h5 id="import-“image”"><a href="#import-“image”" class="headerlink" title="import “image”"></a>import “image”</h5><p>有gif, png, jpeg格式，可以encode和decode，颜色空间有rgba, ycbcr, gray, paletted, cmyk, alpha，有subimage函数可以用。<code>https://github.com/nfnt/resize</code></p>
+<h5 id="import-“index-suffixarray”"><a href="#import-“index-suffixarray”" class="headerlink" title="import “index/suffixarray”"></a>import “index/suffixarray”</h5><p>针对[]byte的数据建立索引，log(n)时间复杂度下，用Lookup查找子串。</p>
+<h5 id="import-“internal”"><a href="#import-“internal”" class="headerlink" title="import “internal”"></a>import “internal”</h5><p>bytealg, cpu, nettrace只是支持内部其他包来使用，并不是面向go的使用者，</p>
+<p>poll包主要将面向系统线程的非阻塞操作转换成面向协程的阻塞操作，包了很多系统调用。</p>
+<p>race包里封装了runtime的acquire, release等锁的实现函数。</p>
+<p>trace包里定义了如何获取goroutine的运行情况，HIA包括P,G的调度情况，调用栈的情况。</p>
+<p>singleflight包防止请求击穿，类似于合并回源，主要的函数 Group.Do()。</p>
+<h5 id="import-“io”"><a href="#import-“io”" class="headerlink" title="import “io”"></a>import “io”</h5><p>普通Reader，PipeReader, limitReader，MultiReader，TeeReader，SectionReader，还有CopyBuffer，CopyN</p>
+<p>ioutil包   Discard 类似于/dev/null，里面竟然有一个TempDir()创建一个临时文件，更应该放在os包里才对吧</p>
+<h5 id="import-“log”"><a href="#import-“log”" class="headerlink" title="import “log”"></a>import “log”</h5><p>可以直接用log.Println() 输出到屏幕，或者 New(out io.Writer, prefix string, flag int) *Logger。</p>
+<h5 id="impot-“math”"><a href="#impot-“math”" class="headerlink" title="impot “math”"></a>impot “math”</h5><p>数学计算</p>
+<h5 id="import-“mime”"><a href="#import-“mime”" class="headerlink" title="import “mime”"></a>import “mime”</h5><p> 管理mime的对应关系，有系统的mime，也可以自己添加mime</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/etc/mime.types</span><br><span class="line">/etc/apache2/mime.types</span><br><span class="line">/etc/apache/mime.types</span><br></pre></td></tr></table></figure>
+<h5 id="import-“net”"><a href="#import-“net”" class="headerlink" title="import “net”"></a>import “net”</h5>
   </section>
   <footer class="post-footer">
     <!--
