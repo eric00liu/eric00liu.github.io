@@ -86,7 +86,10 @@
 <h5 id="impot-“math”"><a href="#impot-“math”" class="headerlink" title="impot “math”"></a>impot “math”</h5><p>数学计算</p>
 <h5 id="import-“mime”"><a href="#import-“mime”" class="headerlink" title="import “mime”"></a>import “mime”</h5><p> 管理mime的对应关系，有系统的mime，也可以自己添加mime</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/etc/mime.types</span><br><span class="line">/etc/apache2/mime.types</span><br><span class="line">/etc/apache/mime.types</span><br></pre></td></tr></table></figure>
-<h5 id="import-“net”"><a href="#import-“net”" class="headerlink" title="import “net”"></a>import “net”</h5>
+<h5 id="import-“net”"><a href="#import-“net”" class="headerlink" title="import “net”"></a>import “net”</h5><p>Dialer 可以支持的网络协议有，tcp, udp, ip4, ip6, unix, unixgram, unixpacket。 都是在Conn的基础上实现各自的方法，主要还是Write(), Read()。</p>
+<p>http包</p>
+<p>Client里有 Transport 负责建立链接和发送req，  CheckRedirect负责当遇到有httpcode是30X跳转的req时，如何处理，默认只检查跳转是否超过10次，即len(via) &gt; 10，Jar如何设置cookie，Timeout是req的超时设置。</p>
+
   </section>
   <footer class="post-footer">
     <!--
@@ -99,6 +102,10 @@
 </article>
 
 <nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2019/07/08/kibana搜索语法/">
+        ← prev <!--kibana搜索语法-->
+    </a>
     
     <span class="page-number">•</span>
     
