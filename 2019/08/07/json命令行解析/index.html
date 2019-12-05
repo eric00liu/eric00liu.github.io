@@ -50,6 +50,7 @@
     <h5 id="条件判断时，一定要有-else-和-end。"><a href="#条件判断时，一定要有-else-和-end。" class="headerlink" title="条件判断时，一定要有 else 和 end。"></a>条件判断时，一定要有 else 和 end。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cat huaping2array.json | jq &apos;map(if .media_type == &quot;video&quot; then .pkt_pts else &quot;&quot; end )&apos;</span><br><span class="line"></span><br><span class="line">echo &apos;[0, 1, 2, 3]&apos; | jq &apos;map(if . == 0 then &quot;zero&quot; elif . == 1 then &quot;one&quot; elif . == 2 then &quot;two&quot; else &quot;many&quot; end)&apos;</span><br></pre></td></tr></table></figure>
 <h5 id="将剪贴板的内容json格式化"><a href="#将剪贴板的内容json格式化" class="headerlink" title="将剪贴板的内容json格式化"></a>将剪贴板的内容json格式化</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias &quot;jsfmt=xclip -o |jq&quot;</span><br></pre></td></tr></table></figure>
 <p>参考  <a href="https://mozillazg.com/2018/01/jq-use-examples-cookbook.html" target="_blank" rel="noopener">https://mozillazg.com/2018/01/jq-use-examples-cookbook.html</a></p>
+<p>jsfmt ‘.responses | .[].hits.hits[]._source.app’</p>
 
   </section>
   <footer class="post-footer">
