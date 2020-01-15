@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/ericliu.png"/>
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Eric Liu" href="/atom.xml">
+        <title>golang 高性能日志库 | EricLiu</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/ericliu.png" alt="EricLiu" /></a>
+            <h1><a href="/">Eric Liu</a></h1>
+            <p></p>
+            <div id="follow-icons">
+                  <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a type="text/html" href="/about.html">About</a></h6>
+
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  December 5, 2019
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/golang/'>golang</a> 
+    
+      <a href='/tags/zap/'>zap</a> 
+    
+      <a href='/tags/zerolog/'>zerolog</a> 
+    
+      <a href='/tags/logrus/'>logrus</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">golang 高性能日志库</h1>
+  <section class="post-content article-entry">
+    <p>以下是zap的benchmarks代码所跑出的结果。</p>
+<p>goos: linux<br>goarch: amd64<br>pkg: go.uber.org/zap/benchmarks</p>
+<h5 id="BenchmarkDisabledWithoutFields为打印静态字符串的性能对比，除了sugar和std的Formatting这两个是按printf打印，且输出到-dev-null"><a href="#BenchmarkDisabledWithoutFields为打印静态字符串的性能对比，除了sugar和std的Formatting这两个是按printf打印，且输出到-dev-null" class="headerlink" title="BenchmarkDisabledWithoutFields为打印静态字符串的性能对比，除了sugar和std的Formatting这两个是按printf打印，且输出到/dev/null"></a>BenchmarkDisabledWithoutFields为打印静态字符串的性能对比，除了sugar和std的Formatting这两个是按printf打印，且输出到/dev/null</h5><p>BenchmarkDisabledWithoutFields/Zap-8        85337349            12.4 ns/op<br>BenchmarkDisabledWithoutFields/Zap.Check-8             91927620            11.9 ns/op<br>BenchmarkDisabledWithoutFields/Zap.Sugar-8             100000000            11.2 ns/op<br>BenchmarkDisabledWithoutFields/Zap.SugarFormatting-8               267057          4464 ns/op<br>BenchmarkDisabledWithoutFields/std.Formatting-8                    302109          3826 ns/op<br>BenchmarkDisabledWithoutFields/apex/log-8                        536362050             2.16 ns/op<br>BenchmarkDisabledWithoutFields/sirupsen/logrus-8                 134507427             8.91 ns/op<br>BenchmarkDisabledWithoutFields/rs/zerolog-8                      920809478             1.27 ns/op</p>
+<h2 id="—-BENCH-BenchmarkDisabledWithoutFields"><a href="#—-BENCH-BenchmarkDisabledWithoutFields" class="headerlink" title="— BENCH: BenchmarkDisabledWithoutFields"></a>— BENCH: BenchmarkDisabledWithoutFields</h2><h5 id="BenchmarkDisabledAccumulatedContext为打印静态字符串，且在logger申请时带上了withField-有9种类型的数据，除了sugar的Formatting还叠加了printf打印"><a href="#BenchmarkDisabledAccumulatedContext为打印静态字符串，且在logger申请时带上了withField-有9种类型的数据，除了sugar的Formatting还叠加了printf打印" class="headerlink" title="BenchmarkDisabledAccumulatedContext为打印静态字符串，且在logger申请时带上了withField()有9种类型的数据，除了sugar的Formatting还叠加了printf打印"></a>BenchmarkDisabledAccumulatedContext为打印静态字符串，且在logger申请时带上了withField()有9种类型的数据，除了sugar的Formatting还叠加了printf打印</h5><p>​    scenario_bench_test.go:32: Logging at a disabled level without any structured context.<br>BenchmarkDisabledAccumulatedContext/Zap-8                        86510926            13.5 ns/op<br>BenchmarkDisabledAccumulatedContext/Zap.Check-8                  89121138            13.0 ns/op<br>BenchmarkDisabledAccumulatedContext/Zap.Sugar-8                  100000000            11.7 ns/op<br>BenchmarkDisabledAccumulatedContext/Zap.SugarFormatting-8        12378014            95.9 ns/op<br>BenchmarkDisabledAccumulatedContext/apex/log-8                   1000000000             0.879 ns/op<br>BenchmarkDisabledAccumulatedContext/sirupsen/logrus-8            100000000            11.1 ns/op<br>BenchmarkDisabledAccumulatedContext/rs/zerolog-8                 728206543             1.38 ns/op</p>
+<h2 id="—-BENCH-BenchmarkDisabledAccumulatedContext"><a href="#—-BENCH-BenchmarkDisabledAccumulatedContext" class="headerlink" title="— BENCH: BenchmarkDisabledAccumulatedContext"></a>— BENCH: BenchmarkDisabledAccumulatedContext</h2><h5 id="BenchmarkDisabledAddingFields为打印静态字符串，且在logger打印时带上了withField-有9种类型的数据"><a href="#BenchmarkDisabledAddingFields为打印静态字符串，且在logger打印时带上了withField-有9种类型的数据" class="headerlink" title="BenchmarkDisabledAddingFields为打印静态字符串，且在logger打印时带上了withField()有9种类型的数据"></a>BenchmarkDisabledAddingFields为打印静态字符串，且在logger打印时带上了withField()有9种类型的数据</h5><p>​    scenario_bench_test.go:111: Logging at a disabled level with some accumulated context.<br>BenchmarkDisabledAddingFields/Zap-8                               6410576           180 ns/op<br>BenchmarkDisabledAddingFields/Zap.Check-8                        85936351            13.9 ns/op<br>BenchmarkDisabledAddingFields/Zap.Sugar-8                        13037977            92.3 ns/op<br>BenchmarkDisabledAddingFields/apex/log-8                          2593590           464 ns/op<br>BenchmarkDisabledAddingFields/sirupsen/logrus-8                   1694652           706 ns/op<br>BenchmarkDisabledAddingFields/rs/zerolog-8                       17667589            67.4 ns/op</p>
+<h2 id="—-BENCH-BenchmarkDisabledAddingFields"><a href="#—-BENCH-BenchmarkDisabledAddingFields" class="headerlink" title="— BENCH: BenchmarkDisabledAddingFields"></a>— BENCH: BenchmarkDisabledAddingFields</h2><h5 id="BenchmarkWithoutFields-为打印静态字符串的性能对比，跟BenchmarkDisabledWithoutFields的区别是使用了debug日志级别，而不是error日志级别。除了sugar和stdlib-Printf和zerolog这三个的Formatting是按printf打印"><a href="#BenchmarkWithoutFields-为打印静态字符串的性能对比，跟BenchmarkDisabledWithoutFields的区别是使用了debug日志级别，而不是error日志级别。除了sugar和stdlib-Printf和zerolog这三个的Formatting是按printf打印" class="headerlink" title="BenchmarkWithoutFields 为打印静态字符串的性能对比，跟BenchmarkDisabledWithoutFields的区别是使用了debug日志级别，而不是error日志级别。除了sugar和stdlib.Printf和zerolog这三个的Formatting是按printf打印"></a>BenchmarkWithoutFields 为打印静态字符串的性能对比，跟BenchmarkDisabledWithoutFields的区别是使用了debug日志级别，而不是error日志级别。除了sugar和stdlib.Printf和zerolog这三个的Formatting是按printf打印</h5><p>​    scenario_bench_test.go:180: Logging at a disabled level, adding context at each log site.<br>BenchmarkWithoutFields/Zap-8                                      6590036           184 ns/op<br>BenchmarkWithoutFields/Zap.Check-8                                6278846           198 ns/op<br>BenchmarkWithoutFields/Zap.CheckSampled-8                        21960214            53.5 ns/op<br>BenchmarkWithoutFields/Zap.Sugar-8                                3862297           275 ns/op<br>BenchmarkWithoutFields/Zap.SugarFormatting-8                       231350          4924 ns/op<br>BenchmarkWithoutFields/apex/log-8                                  563102          2083 ns/op<br>BenchmarkWithoutFields/go-kit/kit/log-8                           3193994           386 ns/op<br>BenchmarkWithoutFields/inconshreveable/log15-8                     240975          4441 ns/op<br>BenchmarkWithoutFields/sirupsen/logrus-8                           339157          3361 ns/op<br>BenchmarkWithoutFields/stdlib.Println-8                           3062670           392 ns/op<br>BenchmarkWithoutFields/stdlib.Printf-8                             311422          4358 ns/op<br>BenchmarkWithoutFields/rs/zerolog-8                               8673320           137 ns/op<br>BenchmarkWithoutFields/rs/zerolog.Formatting-8                     242422          5823 ns/op<br>BenchmarkWithoutFields/rs/zerolog.Check-8                         6948417           187 ns/op</p>
+<h2 id="—-BENCH-BenchmarkWithoutFields"><a href="#—-BENCH-BenchmarkWithoutFields" class="headerlink" title="— BENCH: BenchmarkWithoutFields"></a>— BENCH: BenchmarkWithoutFields</h2><h5 id="BenchmarkAccumulatedContext-为打印静态字符串的性能对比，且在logger申请时带上了withField-有9种类型的数据，使用了debug日志级别，而不是error日志级别。除了sugar和zerolog的Formatting是按printf打印"><a href="#BenchmarkAccumulatedContext-为打印静态字符串的性能对比，且在logger申请时带上了withField-有9种类型的数据，使用了debug日志级别，而不是error日志级别。除了sugar和zerolog的Formatting是按printf打印" class="headerlink" title="BenchmarkAccumulatedContext 为打印静态字符串的性能对比，且在logger申请时带上了withField()有9种类型的数据，使用了debug日志级别，而不是error日志级别。除了sugar和zerolog的Formatting是按printf打印"></a>BenchmarkAccumulatedContext 为打印静态字符串的性能对比，且在logger申请时带上了withField()有9种类型的数据，使用了debug日志级别，而不是error日志级别。除了sugar和zerolog的Formatting是按printf打印</h5><p>​    scenario_bench_test.go:240: Logging without any structured context.<br>BenchmarkAccumulatedContext/Zap-8                                 3980222           255 ns/op<br>BenchmarkAccumulatedContext/Zap.Check-8                           5550046           209 ns/op<br>BenchmarkAccumulatedContext/Zap.CheckSampled-8                   20133012            57.5 ns/op<br>BenchmarkAccumulatedContext/Zap.Sugar-8                           4194475           295 ns/op<br>BenchmarkAccumulatedContext/Zap.SugarFormatting-8                  229069          4973 ns/op<br>BenchmarkAccumulatedContext/apex/log-8                              33429         30532 ns/op<br>BenchmarkAccumulatedContext/go-kit/kit/log-8                       154054          8585 ns/op<br>BenchmarkAccumulatedContext/inconshreveable/log15-8                 53823         21170 ns/op<br>BenchmarkAccumulatedContext/sirupsen/logrus-8                       38761         31527 ns/op<br>BenchmarkAccumulatedContext/rs/zerolog-8                          8759184           150 ns/op<br>BenchmarkAccumulatedContext/rs/zerolog.Check-8                    7921603           151 ns/op<br>BenchmarkAccumulatedContext/rs/zerolog.Formatting-8                270817          4438 ns/op</p>
+<h2 id="—-BENCH-BenchmarkAccumulatedContext"><a href="#—-BENCH-BenchmarkAccumulatedContext" class="headerlink" title="— BENCH: BenchmarkAccumulatedContext"></a>— BENCH: BenchmarkAccumulatedContext</h2><h5 id="BenchmarkAddingFields-且在logger打印时带上了withField-有9种类型的数据，使用了debug日志级别，而不是error日志级别。"><a href="#BenchmarkAddingFields-且在logger打印时带上了withField-有9种类型的数据，使用了debug日志级别，而不是error日志级别。" class="headerlink" title="BenchmarkAddingFields 且在logger打印时带上了withField()有9种类型的数据，使用了debug日志级别，而不是error日志级别。"></a>BenchmarkAddingFields 且在logger打印时带上了withField()有9种类型的数据，使用了debug日志级别，而不是error日志级别。</h5><p>​    scenario_bench_test.go:378: Logging with some accumulated context.<br>BenchmarkAddingFields/Zap-8                                        644416          1690 ns/op<br>BenchmarkAddingFields/Zap.Check-8                                  639225          1690 ns/op<br>BenchmarkAddingFields/Zap.CheckSampled-8                          4912309           245 ns/op<br>BenchmarkAddingFields/Zap.Sugar-8                                  515523          2038 ns/op<br>BenchmarkAddingFields/apex/log-8                                    38698         30643 ns/op<br>BenchmarkAddingFields/go-kit/kit/log-8                             154527          8435 ns/op<br>BenchmarkAddingFields/inconshreveable/log15-8                       36103         33431 ns/op<br>BenchmarkAddingFields/sirupsen/logrus-8                             34834         33870 ns/op<br>BenchmarkAddingFields/rs/zerolog-8                                 184165          7042 ns/op<br>BenchmarkAddingFields/rs/zerolog.Check-8                           160432          7150 ns/op</p>
+<h2 id="—-BENCH-BenchmarkAddingFields"><a href="#—-BENCH-BenchmarkAddingFields" class="headerlink" title="— BENCH: BenchmarkAddingFields"></a>— BENCH: BenchmarkAddingFields</h2><h5 id="BenchmarkCompStdAddingFields不在zap的代码库里，目的是跟标准库做最直接的性能对比，输出到-dev-null"><a href="#BenchmarkCompStdAddingFields不在zap的代码库里，目的是跟标准库做最直接的性能对比，输出到-dev-null" class="headerlink" title="BenchmarkCompStdAddingFields不在zap的代码库里，目的是跟标准库做最直接的性能对比，输出到/dev/null"></a>BenchmarkCompStdAddingFields不在zap的代码库里，目的是跟标准库做最直接的性能对比，输出到/dev/null</h5><p>BenchmarkCompStdAddingFields/Zap-8               772062          1501 ns/op<br>BenchmarkCompStdAddingFields/Zap.Check-8         769766          1541 ns/op<br>BenchmarkCompStdAddingFields/Zap.Sugar-8         587250          1829 ns/op<br>BenchmarkCompStdAddingFields/stdlib.Printf-8               285757          3962 ns/op<br>BenchmarkCompStdAddingFields/apex/log-8                     39156         30363 ns/op<br>BenchmarkCompStdAddingFields/sirupsen/logrus-8              35476         33387 ns/op<br>BenchmarkCompStdAddingFields/rs/zerolog-8                  162192          6737 ns/op</p>
+<h3 id="—-BENCH-BenchmarkCompStdAddingFields"><a href="#—-BENCH-BenchmarkCompStdAddingFields" class="headerlink" title="— BENCH: BenchmarkCompStdAddingFields"></a>— BENCH: BenchmarkCompStdAddingFields</h3><h3 id="结论"><a href="#结论" class="headerlink" title="结论:"></a>结论:</h3><p>如果使用printf(“%s”, str)这种方式打印日志的话，标准库是性能最好的，zap和zerolog性能会略微差些。</p>
+<p>如果是withfield()的方式，则zap的性能可以超过标准库printf方式的性能。</p>
+<p>withfield使用举例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">logger, _ := zap.NewProduction()</span><br><span class="line"><span class="keyword">defer</span> logger.Sync()</span><br><span class="line">logger.Info(<span class="string">"failed to fetch URL"</span>,</span><br><span class="line">  zap.String(<span class="string">"url"</span>, url),</span><br><span class="line">  zap.Int(<span class="string">"attempt"</span>, <span class="number">3</span>),</span><br><span class="line">  zap.Duration(<span class="string">"backoff"</span>, time.Second),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Eric Liu</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2019/12/20/纯音频m3u8/">
+        ← prev <!--nginx-rtmp里封装纯音频mpeg-ts遇到的问题-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2019/11/26/时间相关的系统调用/">
+        <!--定时器相关的系统调用--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zODI4NS8xNDgxMw==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2020 Eric Liu. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> </section>
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274257392'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274257392%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-122301641-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+        <{% if (theme.mermaid.enable)  %}>
+          <script src='https://cdn.bootcss.com/mermaid/7.1.2/mermaid.min.js'></script>
+          <script>
+            if (window.mermaid) {
+              mermaid.initialize({theme: 'forest'});
+            }
+          </script>
+        <{% endif %}>
+
+
+    </body>
+</html>
+
+
